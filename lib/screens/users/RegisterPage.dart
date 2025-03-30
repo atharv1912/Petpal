@@ -19,7 +19,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String _selectedRole = 'user'; // Default role
 
   // Profile picture URL, can be added later after upload logic
-  String _profilePictureUrl = 'https://example.com/default_profile.png';
+  final String _profilePictureUrl = 'https://example.com/default_profile.png';
 
   @override
   Widget build(BuildContext context) {

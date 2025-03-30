@@ -3,7 +3,7 @@ import 'package:flutter_application_1/auth/SupabaseServices.dart';
 import 'package:intl/intl.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({super.key});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();

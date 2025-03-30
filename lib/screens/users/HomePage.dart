@@ -9,7 +9,7 @@ import 'package:flutter_application_1/screens/users/profile-page.dart';
 final supabase = Supabase.instance.client;
 
 class HomePage extends StatefulWidget {
-  HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   _HomePageState createState() => _HomePageState();

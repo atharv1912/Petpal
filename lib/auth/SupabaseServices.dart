@@ -18,6 +18,28 @@ class SupabaseService {
     );
   }
 
+  Stream<List<Map<String, dynamic>>> getPendingReportsStream() {
+    return supabase
+        .from('reports')
+        .stream(primaryKey: ['id'])
+        .order('created_at', ascending: false)
+        .execute()
+        .asyncMap((data) async {
+          // First filter in the query
+          final filtered = await supabase
+              .from('reports')
+              .select()
+              .eq('status', 'pending')
+              .order('created_at', ascending: false);
+          return filtered;
+        });
+  }
+
+  // Get current user ID
+  String? getCurrentUserId() {
+    return supabase.auth.currentUser?.id;
+  }
+
   // Register a new user
   Future<bool> registerUser({
     required BuildContext context,
@@ -144,9 +166,6 @@ class SupabaseService {
   }
 
   // Get current user ID
-  String? getCurrentUserId() {
-    return supabase.auth.currentUser?.id;
-  }
 
   // Fetch user details
   Future<Map<String, dynamic>?> fetchUserDetails() async {
@@ -204,35 +223,24 @@ class SupabaseService {
   }
 
   // Upload image (generic method for both gallery and camera)
-  Future<String> uploadImage(XFile imageFile, {bool isCamera = false}) async {
-    final user = supabase.auth.currentUser;
-    if (user == null) {
-      throw Exception('User not authenticated');
-    }
-
+  Future<String> uploadReportImage(File imageFile) async {
     try {
-      final file = File(imageFile.path);
-      final fileExt = isCamera
-          ? path.extension(imageFile.path).replaceAll('.', '')
-          : imageFile.path.split('.').last;
-      final uuid = Uuid();
-      final fileName = '${uuid.v4()}.$fileExt';
-      final filePath = 'animal_images/$fileName';
+      final fileExt = path.extension(imageFile.path).replaceAll('.', '');
+      final fileName = '${const Uuid().v4()}.$fileExt';
+      final filePath = 'reports/$fileName';
 
-      await supabase.storage.from('photo').upload(
+      await supabase.storage.from('images').upload(
             filePath,
-            file,
+            imageFile,
             fileOptions: FileOptions(
-              contentType: 'photo/$fileExt',
-              upsert: true,
+              contentType: 'image/$fileExt',
+              upsert: false,
             ),
           );
 
-      final imageUrl = supabase.storage.from('photo').getPublicUrl(filePath);
-      return imageUrl;
+      return supabase.storage.from('images').getPublicUrl(filePath);
     } catch (e) {
-      print('Error uploading image: $e');
-      throw Exception("Image upload failed: $e");
+      throw Exception('Failed to upload image: $e');
     }
   }
 
@@ -288,11 +296,16 @@ class SupabaseService {
         'lng': lng,
         'status': 'pending',
         'created_at': DateTime.now().toIso8601String(),
-      }).select();
+      }).select('id');
 
-      return response[0]['id'];
+      // Handle the response properly
+      if (response.isEmpty) {
+        throw Exception('No data returned from insert operation');
+      }
+
+      // Convert the ID to string regardless of its original type
+      return response[0]['id'].toString();
     } catch (e) {
-      print('Error inserting report: $e');
       throw Exception('Failed to insert report: $e');
     }
   }

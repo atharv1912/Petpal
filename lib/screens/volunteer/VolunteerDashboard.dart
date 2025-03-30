@@ -6,7 +6,7 @@ import 'package:flutter_application_1/screens/volunteer/profilePage.dart';
 import 'package:flutter_application_1/screens/users/LoginPage.dart';
 
 class VolunteerDashboard extends StatefulWidget {
-  const VolunteerDashboard({Key? key}) : super(key: key);
+  const VolunteerDashboard({super.key});
 
   @override
   State<VolunteerDashboard> createState() => _VolunteerDashboardState();

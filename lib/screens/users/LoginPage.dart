@@ -5,6 +5,8 @@ import 'package:flutter_application_1/screens/users/HomePage.dart';
 import 'package:flutter_application_1/screens/volunteer/VolunteerDashboard.dart'; // Import the volunteer alert screen
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
