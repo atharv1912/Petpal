@@ -52,6 +52,7 @@ MERGED from [:flutter_plugin_android_lifecycle] C:\Users\Atharv\Desktop\CEP\petp
 MERGED from [:fluttertoast] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\fluttertoast\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:geolocator_android] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\geolocator_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-15:12
 MERGED from [:path_provider_android] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\path_provider_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-7:12
+MERGED from [:permission_handler_android] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\permission_handler_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:shared_preferences_android] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\shared_preferences_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:url_launcher_android] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\url_launcher_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-14:12
 MERGED from [com.google.android.gms:play-services-location:21.2.0] C:\Users\Atharv\.gradle\caches\transforms-3\91c1391cf3d1dd93bd19f54de5c493a6\transformed\jetified-play-services-location-21.2.0\AndroidManifest.xml:2:1-9:12
@@ -173,6 +174,8 @@ MERGED from [:geolocator_android] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\bui
 MERGED from [:geolocator_android] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\geolocator_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:path_provider_android] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\path_provider_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:path_provider_android] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\path_provider_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:permission_handler_android] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\permission_handler_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:permission_handler_android] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\permission_handler_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:shared_preferences_android] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\shared_preferences_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:shared_preferences_android] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\shared_preferences_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:url_launcher_android] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\url_launcher_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44

@@ -504,15 +504,15 @@ class SupabaseService {
   }
 
   // Update password
-  Future<bool> updatePassword(String newPassword) async {
+  Future<dynamic> updatePassword(String newPassword) async {
     try {
-      await supabase.auth.updateUser(
+      final response = await supabase.auth.updateUser(
         UserAttributes(password: newPassword),
       );
-      return true;
+      return response;
     } catch (e) {
       print('Error updating password: $e');
-      return false;
+      return {'error': e};
     }
   }
 
