@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/auth/SupabaseServices.dart';
 import 'package:flutter_application_1/screens/users/RegisterPage.dart';
 import 'package:flutter_application_1/screens/users/HomePage.dart';
-import 'package:flutter_application_1/screens/volunteer/AlertScreen.dart'; // Import the volunteer alert screen
+import 'package:flutter_application_1/screens/volunteer/VolunteerDashboard.dart'; // Import the volunteer alert screen
 
 class LoginPage extends StatefulWidget {
   @override
@@ -70,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
             if (userRole == 'volunteer') {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => AlertScreen()),
+                MaterialPageRoute(builder: (context) => VolunteerDashboard()),
               );
             } else {
               Navigator.pushReplacement(
