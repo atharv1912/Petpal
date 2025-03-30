@@ -21,17 +21,13 @@ class SupabaseService {
   Stream<List<Map<String, dynamic>>> getPendingReportsStream() {
     return supabase
         .from('reports')
-        .stream(primaryKey: ['id'])
+        .stream(primaryKey: ['id']) // Ensure 'id' is the primary key
+        .eq('status', 'pending') // Fetch only pending reports
         .order('created_at', ascending: false)
-        .execute()
-        .asyncMap((data) async {
-          // First filter in the query
-          final filtered = await supabase
-              .from('reports')
-              .select()
-              .eq('status', 'pending')
-              .order('created_at', ascending: false);
-          return filtered;
+        .map((data) =>
+            List<Map<String, dynamic>>.from(data)) // Ensure correct type
+        .handleError((error) {
+          print('Error in pending reports stream: $error');
         });
   }
 
@@ -343,21 +339,13 @@ class SupabaseService {
   }
 
   // Fetch all reports
-  Future<List<Map<String, dynamic>>> getAllReports() async {
-    final user = supabase.auth.currentUser;
-    if (user == null) return [];
-
-    try {
-      final response = await supabase
-          .from('reports')
-          .select()
-          .order('created_at', ascending: false);
-
-      return List<Map<String, dynamic>>.from(response);
-    } catch (e) {
-      print('Error fetching all reports: $e');
-      return [];
-    }
+  Stream<List<Map<String, dynamic>>> getAllReportsStream() {
+    return supabase
+        .from('reports')
+        .stream(primaryKey: ['id'])
+        .order('created_at', ascending: false)
+        .map<List<Map<String, dynamic>>>(
+            (data) => List<Map<String, dynamic>>.from(data));
   }
 
   // Update report status

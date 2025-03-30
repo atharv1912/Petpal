@@ -16,41 +16,84 @@ class _AlertScreenState extends State<AlertScreen> {
   final FlutterLocalNotificationsPlugin _notificationsPlugin =
       FlutterLocalNotificationsPlugin();
   bool _showOnlyPending = true;
+  late RealtimeChannel _reportsChannel;
+  bool _isInitialLoad = true;
 
   @override
   void initState() {
     super.initState();
     _initializeNotifications();
-    _reportsStream = _supabaseService.getPendingReportsStream();
     _setupRealTimeListener();
+    _setupReportsStream();
+  }
+
+  @override
+  void dispose() {
+    _reportsChannel.unsubscribe();
+    super.dispose();
+  }
+
+  void _setupReportsStream() {
+    setState(() {
+      _isInitialLoad = true;
+    });
+
+    _reportsStream = (_showOnlyPending
+            ? _supabaseService.getPendingReportsStream()
+            : _supabaseService.getAllReportsStream())
+        .map<List<Map<String, dynamic>>>((reports) {
+      // Explicit cast to List<Map<String, dynamic>>
+      return (reports as List).cast<Map<String, dynamic>>();
+    }).handleError((error) {
+      debugPrint('Error in reports stream: $error');
+      return <Map<String, dynamic>>[];
+    });
+
+    // Force UI update when stream is ready
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        setState(() {
+          _isInitialLoad = false;
+        });
+      }
+    });
   }
 
   Future<void> _initializeNotifications() async {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
-    final InitializationSettings initializationSettings =
+    const InitializationSettings initializationSettings =
         InitializationSettings(android: initializationSettingsAndroid);
 
-    await _notificationsPlugin.initialize(
-      initializationSettings,
-      onDidReceiveNotificationResponse: (details) {
-        // Handle notification tap
-      },
-    );
+    await _notificationsPlugin.initialize(initializationSettings);
   }
 
   void _setupRealTimeListener() {
-    _supabaseService.supabase
+    _reportsChannel = _supabaseService.supabase
         .channel('reports_changes')
         .onPostgresChanges(
-          event: PostgresChangeEvent.insert,
+          event: PostgresChangeEvent.all,
           schema: 'public',
           table: 'reports',
           callback: (payload) {
-            if (payload.newRecord['status'] == 'pending') {
+            if (!mounted) return;
+
+            // Only refresh if the change affects our current filter
+            if (_showOnlyPending &&
+                payload.eventType == 'UPDATE' &&
+                payload.newRecord['status'] != 'pending') {
+              return;
+            }
+
+            // Show notification for new pending reports
+            if (payload.eventType == 'INSERT' &&
+                payload.newRecord['status'] == 'pending') {
               _showNewReportNotification(payload.newRecord);
             }
+
+            // Refresh the stream
+            _setupReportsStream();
           },
         )
         .subscribe();
@@ -86,43 +129,62 @@ class _AlertScreenState extends State<AlertScreen> {
         actions: [
           Switch(
             value: _showOnlyPending,
-            onChanged: (value) => setState(() => _showOnlyPending = value),
+            onChanged: (value) {
+              setState(() {
+                _showOnlyPending = value;
+                _setupReportsStream();
+              });
+            },
             activeColor: Colors.orange,
           ),
         ],
       ),
       body: Container(
         color: const Color(0xFFFFFBEB),
-        child: StreamBuilder<List<Map<String, dynamic>>>(
-          stream: _reportsStream,
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            }
+        child: _isInitialLoad
+            ? const Center(child: CircularProgressIndicator())
+            : StreamBuilder<List<Map<String, dynamic>>>(
+                stream: _reportsStream,
+                builder: (context, snapshot) {
+                  // Handle connection state
+                  if (snapshot.connectionState == ConnectionState.waiting &&
+                      !snapshot.hasData) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-            if (!snapshot.hasData) {
-              return const Center(child: CircularProgressIndicator());
-            }
+                  // Handle errors
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text('Error: ${snapshot.error}'),
+                    );
+                  }
 
-            final reports = _showOnlyPending
-                ? snapshot.data!
-                : snapshot.data!
-                    .where((r) => r['status'] != 'pending')
-                    .toList();
+                  // Get filtered reports
+                  final reports = _showOnlyPending
+                      ? snapshot.data
+                              ?.where((r) => r['status'] == 'pending')
+                              .toList() ??
+                          []
+                      : snapshot.data ?? [];
 
-            if (reports.isEmpty) {
-              return const Center(child: Text('No alerts available'));
-            }
+                  if (reports.isEmpty) {
+                    return const Center(
+                      child: Text(
+                        'No alerts available',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    );
+                  }
 
-            return ListView.builder(
-              itemCount: reports.length,
-              itemBuilder: (context, index) {
-                final report = reports[index];
-                return _buildReportCard(report);
-              },
-            );
-          },
-        ),
+                  return ListView.builder(
+                    itemCount: reports.length,
+                    itemBuilder: (context, index) {
+                      final report = reports[index];
+                      return _buildReportCard(report);
+                    },
+                  );
+                },
+              ),
       ),
     );
   }
@@ -141,11 +203,31 @@ class _AlertScreenState extends State<AlertScreen> {
                 height: 200,
                 width: double.infinity,
                 fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                          : null,
+                    ),
+                  );
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return const SizedBox(
+                    height: 200,
+                    child: Center(child: Icon(Icons.broken_image)),
+                  );
+                },
               ),
             const SizedBox(height: 12),
             Text(
               '${report['type']} - ${report['condition']}',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 8),
             Text('Location: ${report['lat']}, ${report['lng']}'),
@@ -153,7 +235,6 @@ class _AlertScreenState extends State<AlertScreen> {
             Text(report['notes'] ?? 'No additional notes'),
             const SizedBox(height: 12),
             if (report['status'] == 'pending') ...[
-              const SizedBox(height: 12),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -162,7 +243,8 @@ class _AlertScreenState extends State<AlertScreen> {
                       onPressed: () =>
                           _handleReportAction(report['id'], 'assigned'),
                       style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: Colors.green)),
+                        side: const BorderSide(color: Colors.green),
+                      ),
                       child: const Text('ACCEPT'),
                     ),
                   ),
@@ -172,7 +254,8 @@ class _AlertScreenState extends State<AlertScreen> {
                       onPressed: () =>
                           _handleReportAction(report['id'], 'rejected'),
                       style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: Colors.red)),
+                        side: const BorderSide(color: Colors.red),
+                      ),
                       child: const Text('REJECT'),
                     ),
                   ),
@@ -188,14 +271,20 @@ class _AlertScreenState extends State<AlertScreen> {
   Future<void> _handleReportAction(String reportId, String status) async {
     try {
       await _supabaseService.updateReportStatus(
-          reportId: reportId, status: status);
+        reportId: reportId,
+        status: status,
+      );
+
       if (status == 'assigned') {
         final userId = _supabaseService.getCurrentUserId();
         if (userId != null) {
           await _supabaseService.assignVolunteer(
-              reportId: reportId, volunteerId: userId);
+            reportId: reportId,
+            volunteerId: userId,
+          );
         }
       }
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Report status updated to $status')),
       );
