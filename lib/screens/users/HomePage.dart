@@ -3,6 +3,7 @@ import 'package:flutter_application_1/screens/users/LoginPage.dart';
 import 'package:flutter_application_1/auth/SupabaseServices.dart';
 import 'package:flutter_application_1/screens/users/camera_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_application_1/screens/users/profile-page.dart';
 
 // Import the global supabase client
 final supabase = Supabase.instance.client;
@@ -63,13 +64,15 @@ class _HomePageState extends State<HomePage> {
       body: _selectedIndex == 0
           ? _buildHomeContent()
           : _selectedIndex == 1
-              ? CameraScreen() // Direct navigation to camera screen
-              : Center(
-                  child: Text(
-                    "Profile Page",
-                    style: const TextStyle(fontSize: 24),
-                  ),
-                ),
+              ? CameraScreen()
+              : _selectedIndex == 2
+                  ? ProfilePage() // Direct navigation to camera screen
+                  : Center(
+                      child: Text(
+                        "Profile Page",
+                        style: const TextStyle(fontSize: 24),
+                      ),
+                    ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

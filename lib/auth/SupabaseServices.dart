@@ -5,9 +5,10 @@ import 'dart:io';
 import 'package:path/path.dart' as path;
 import 'package:uuid/uuid.dart';
 
-final supabase = Supabase.instance.client;
-
 class SupabaseService {
+  // Add this getter to access the Supabase client
+  SupabaseClient get supabase => Supabase.instance.client;
+
   // Initialize Supabase (call this once in main.dart)
   Future<void> initialize() async {
     await Supabase.initialize(

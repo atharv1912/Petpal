@@ -63,7 +63,8 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   Future<void> _submitReport() async {
-    final user = supabase.auth.currentUser;
+    final supabaseService = SupabaseService();
+    final user = supabaseService.supabase.auth.currentUser;
     if (user == null) {
       // Redirect to login page if the user is not authenticated
       ScaffoldMessenger.of(context).showSnackBar(
@@ -89,7 +90,6 @@ class _CameraScreenState extends State<CameraScreen> {
     });
 
     try {
-      final supabaseService = SupabaseService();
       final imageUrl = await supabaseService.uploadImage(_imageFile!);
 
       // Insert report into Supabase

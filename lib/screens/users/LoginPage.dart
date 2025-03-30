@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/auth/SupabaseServices.dart';
 import 'package:flutter_application_1/screens/users/RegisterPage.dart';
 import 'package:flutter_application_1/screens/users/HomePage.dart';
+import 'package:flutter_application_1/screens/volunteer/AlertScreen.dart'; // Import the volunteer alert screen
 
 class LoginPage extends StatefulWidget {
   @override
@@ -23,7 +24,6 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  // Validate email format
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
       return 'Email is required';
@@ -35,7 +35,6 @@ class _LoginPageState extends State<LoginPage> {
     return null;
   }
 
-  // Validate password
   String? _validatePassword(String? value) {
     if (value == null || value.isEmpty) {
       return 'Password is required';
@@ -46,7 +45,6 @@ class _LoginPageState extends State<LoginPage> {
     return null;
   }
 
-  // Handle login process
   Future<void> _handleLogin() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
@@ -54,19 +52,41 @@ class _LoginPageState extends State<LoginPage> {
       });
 
       try {
-        await _supabaseService.loginUser(
+        final success = await _supabaseService.loginUser(
           context: context,
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
         );
 
-        // If login is successful, navigate to HomePage
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage()),
-        );
+        if (success) {
+          // Fetch user details to check role
+          final userDetails = await _supabaseService.fetchUserDetails();
+
+          if (userDetails != null) {
+            final userRole =
+                userDetails['role']?.toString().toLowerCase() ?? 'users';
+
+            // Navigate based on role
+            if (userRole == 'volunteer') {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => AlertScreen()),
+              );
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
+            }
+          } else {
+            // If user details couldn't be fetched, go to home page as fallback
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
+          }
+        }
       } catch (e) {
-        // Handle exceptions
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Login error: ${e.toString()}')),
         );
