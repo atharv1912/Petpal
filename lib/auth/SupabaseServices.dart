@@ -517,6 +517,25 @@ class SupabaseService {
     }
   }
 
+  // Future<Map<String, dynamic>?> _getUserRole() async {
+  //   try {
+  //     final userId = supabase.auth.currentUser?.id;
+  //     if (userId == null) return 'user'; // Default role if no user
+
+  //     // Fetch user data from your 'profiles' or 'users' table
+  //     final response = await supabase
+  //         .from('profiles') // Replace with your table name
+  //         .select('role')
+  //         .eq('id', userId)
+  //         .single();
+
+  //     return response['role'] ?? 'user'; // Default to 'user' if role is null
+  //   } catch (e) {
+  //     print('Error fetching user role: $e');
+  //     return 'user'; // Default role on error
+  //   }
+  // }
+
   // Get users by role
   Future<List<Map<String, dynamic>>> getUsersByRole(String role) async {
     try {

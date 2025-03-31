@@ -236,6 +236,30 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "geocoding",
+      "rootUri": "file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/geocoding-2.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "geocoding_android",
+      "rootUri": "file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/geocoding_android-3.3.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "geocoding_ios",
+      "rootUri": "file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/geocoding_ios-2.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "geocoding_platform_interface",
+      "rootUri": "file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/geocoding_platform_interface-3.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "geolocator",
       "rootUri": "file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/geolocator-10.1.1",
       "packageUri": "lib/",
@@ -644,6 +668,12 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "timeago",
+      "rootUri": "file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/timeago-3.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "timezone",
       "rootUri": "file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/timezone-0.9.4",
       "packageUri": "lib/",
@@ -764,7 +794,7 @@
       "languageVersion": "3.6"
     }
   ],
-  "generated": "2025-03-30T14:13:55.584391Z",
+  "generated": "2025-03-31T08:02:36.526071Z",
   "generator": "pub",
   "generatorVersion": "3.6.1",
   "flutterRoot": "file:///C:/flutter",
