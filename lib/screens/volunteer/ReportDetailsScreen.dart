@@ -27,11 +27,22 @@ class ReportDetailsScreen extends StatelessWidget {
             : 'REJECTED';
 
     return Scaffold(
+      backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: const Text('Report Details'),
+        elevation: 0,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black87,
+        centerTitle: true,
+        title: const Text(
+          'Report Details',
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 18,
+          ),
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.share),
+            icon: const Icon(Icons.share, color: Colors.orange),
             onPressed: () => _shareReport(context),
           ),
         ],
@@ -39,79 +50,116 @@ class ReportDetailsScreen extends StatelessWidget {
       body: Stack(
         children: [
           SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
             child: Column(
               children: [
                 if (report['image_url'] != null)
-                  Hero(
-                    tag: 'report-image-${report['id']}',
-                    child: Image.network(
-                      report['image_url'],
-                      height: 300,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return SizedBox(
-                          height: 300,
-                          child: Center(
-                            child: CircularProgressIndicator(
-                              value: loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded /
-                                      loadingProgress.expectedTotalBytes!
-                                  : null,
+                  Stack(
+                    children: [
+                      Hero(
+                        tag: 'report-image-${report['id']}',
+                        child: Container(
+                          height: 280,
+                          width: double.infinity,
+                          decoration: const BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 10,
+                                offset: Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(24),
+                              bottomRight: Radius.circular(24),
+                            ),
+                            child: Image.network(
+                              report['image_url'],
+                              fit: BoxFit.cover,
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    color: Colors.orange,
+                                    value: loadingProgress.expectedTotalBytes !=
+                                            null
+                                        ? loadingProgress
+                                                .cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes!
+                                        : null,
+                                  ),
+                                );
+                              },
+                              errorBuilder: (context, error, stackTrace) {
+                                return const Center(
+                                  child: Icon(
+                                    Icons.broken_image,
+                                    size: 64,
+                                    color: Colors.black26,
+                                  ),
+                                );
+                              },
                             ),
                           ),
-                        );
-                      },
-                      errorBuilder: (context, error, stackTrace) {
-                        return const SizedBox(
-                          height: 300,
-                          child: Center(
-                            child: Icon(
-                              Icons.broken_image,
-                              size: 64,
-                              color: Colors.black26,
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 16,
+                        right: 16,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            color: statusColor,
+                            borderRadius: BorderRadius.circular(30),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black26,
+                                blurRadius: 4,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: Text(
+                            statusText,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
                             ),
                           ),
-                        );
-                      },
+                        ),
+                      ),
+                    ],
+                  ),
+                Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(32),
+                      topRight: Radius.circular(32),
                     ),
                   ),
-                Padding(
-                  padding: const EdgeInsets.all(16),
+                  margin: EdgeInsets.only(
+                    top: report['image_url'] != null ? 0 : 0,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${report['type']}',
-                                  style: const TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  '${report['condition']}',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.black.withOpacity(0.7),
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
+                      if (report['image_url'] == null)
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Container(
+                            margin: const EdgeInsets.only(bottom: 16),
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 6,
+                              horizontal: 16,
+                              vertical: 8,
                             ),
                             decoration: BoxDecoration(
                               color: statusColor,
@@ -122,21 +170,50 @@ class ReportDetailsScreen extends StatelessWidget {
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
+                                fontSize: 12,
                               ),
+                            ),
+                          ),
+                        ),
+                      Text(
+                        '${report['type']}',
+                        style: const TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '${report['condition']}',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black.withOpacity(0.7),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.access_time_rounded,
+                            size: 16,
+                            color: Colors.orange,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            'Reported ${_getTimeAgo(createdAt)}',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black54,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'Reported ${_getTimeAgo(createdAt)}',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.black54,
-                        ),
-                      ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 32),
                       _buildDetailSection(
+                        context: context,
                         icon: Icons.location_on,
                         title: 'Location',
                         content: '${report['lat']}, ${report['lng']}',
@@ -144,18 +221,21 @@ class ReportDetailsScreen extends StatelessWidget {
                       ),
                       if (report['address'] != null)
                         _buildDetailSection(
+                          context: context,
                           icon: Icons.place,
                           title: 'Address',
                           content: report['address'],
                         ),
                       if (report['reporter_name'] != null)
                         _buildDetailSection(
+                          context: context,
                           icon: Icons.person,
                           title: 'Reporter',
                           content: report['reporter_name'],
                         ),
                       if (report['reporter_contact'] != null)
                         _buildDetailSection(
+                          context: context,
                           icon: Icons.phone,
                           title: 'Contact',
                           content: report['reporter_contact'],
@@ -165,17 +245,20 @@ class ReportDetailsScreen extends StatelessWidget {
                       if (report['notes'] != null &&
                           report['notes'].toString().isNotEmpty)
                         _buildDetailSection(
+                          context: context,
                           icon: Icons.notes,
                           title: 'Notes',
                           content: report['notes'],
                         ),
                       if (report['volunteer_name'] != null)
                         _buildDetailSection(
+                          context: context,
                           icon: Icons.volunteer_activism,
                           title: 'Assigned Volunteer',
                           content: report['volunteer_name'],
                         ),
-                      const SizedBox(height: 80), // Space for the bottom button
+                      const SizedBox(
+                          height: 100), // Space for the bottom button
                     ],
                   ),
                 ),
@@ -187,19 +270,34 @@ class ReportDetailsScreen extends StatelessWidget {
               bottom: 16,
               left: 16,
               right: 16,
-              child: ElevatedButton.icon(
-                onPressed: () => _handleRescueAndNavigate(context),
-                icon: const Icon(Icons.directions),
-                label: const Text(
-                  'RESCUE AND NAVIGATE',
-                  style: TextStyle(fontSize: 16),
+              child: Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.orange.withOpacity(0.3),
+                      blurRadius: 12,
+                      offset: const Offset(0, 6),
+                    ),
+                  ],
                 ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                child: ElevatedButton.icon(
+                  onPressed: () => _handleRescueAndNavigate(context),
+                  icon: const Icon(Icons.directions),
+                  label: const Text(
+                    'RESCUE AND NAVIGATE',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 18),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                   ),
                 ),
               ),
@@ -211,6 +309,34 @@ class ReportDetailsScreen extends StatelessWidget {
 
   Future<void> _handleRescueAndNavigate(BuildContext context) async {
     try {
+      // Show loading indicator
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'Accepting rescue...',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+
       // First accept the rescue request
       await _supabaseService.updateReportStatus(
         reportId: report['id'].toString(), // Ensure ID is string
@@ -226,6 +352,9 @@ class ReportDetailsScreen extends StatelessWidget {
         );
       }
 
+      // Close the loading dialog
+      Navigator.pop(context);
+
       // Then open navigation
       await _openMaps(
         double.parse(report['lat'].toString()), // Ensure lat is double
@@ -235,62 +364,117 @@ class ReportDetailsScreen extends StatelessWidget {
       // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Rescue accepted! Opening navigation...'),
+          behavior: SnackBarBehavior.floating,
+          margin: EdgeInsets.all(16),
+          content: Row(
+            children: [
+              Icon(Icons.check_circle, color: Colors.white),
+              SizedBox(width: 16),
+              Expanded(
+                child: Text('Rescue accepted! Opening navigation...'),
+              ),
+            ],
+          ),
           backgroundColor: Colors.green,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+          ),
         ),
       );
 
       // Close the screen after successful operation
       Navigator.pop(context, true); // Pass true to indicate success
     } catch (e) {
+      // Close the loading dialog if it's still open
+      Navigator.pop(context);
+
+      // Show error message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Failed to accept rescue: ${e.toString()}'),
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.all(16),
+          content: Row(
+            children: [
+              const Icon(Icons.error, color: Colors.white),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text('Failed to accept rescue: ${e.toString()}'),
+              ),
+            ],
+          ),
           backgroundColor: Colors.red,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+          ),
         ),
       );
     }
   }
 
   Widget _buildDetailSection({
+    required BuildContext context,
     required IconData icon,
     required String title,
     required String content,
     VoidCallback? action,
   }) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.only(bottom: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(icon, size: 20, color: Colors.orange),
+              Icon(icon, size: 18, color: Colors.orange),
               const SizedBox(width: 8),
               Text(
                 title,
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
+                  color: Colors.black87,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 8),
           GestureDetector(
             onTap: action,
             child: Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(
-                content,
-                style: const TextStyle(
-                  fontSize: 16,
+                color: action != null
+                    ? Colors.orange.withOpacity(0.05)
+                    : Colors.grey.withOpacity(0.05),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: action != null
+                      ? Colors.orange.withOpacity(0.2)
+                      : Colors.grey.withOpacity(0.1),
+                  width: 1,
                 ),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      content,
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: action != null
+                            ? Colors.orange.shade800
+                            : Colors.black87,
+                      ),
+                    ),
+                  ),
+                  if (action != null)
+                    const Icon(
+                      Icons.arrow_forward_ios,
+                      size: 14,
+                      color: Colors.orange,
+                    ),
+                ],
               ),
             ),
           ),
@@ -313,18 +497,6 @@ class ReportDetailsScreen extends StatelessWidget {
         'https://www.google.com/maps/search/?api=1&query=$lat,$lng';
     String appleMapsUrl = 'https://maps.apple.com/?q=$lat,$lng';
     String googleMapsAppUrl = 'comgooglemaps://?q=$lat,$lng';
-
-    // Check if Google Maps app is installed (only for Android)
-    // if (await canLaunchUrl(Uri.parse(googleMapsAppUrl))) {
-    //   await launchUrl(Uri.parse(googleMapsAppUrl));
-    //   return;
-    // }
-
-    // // Open Apple Maps (for iOS)
-    // if (await canLaunchUrl(Uri.parse(appleMapsUrl))) {
-    //   await launchUrl(Uri.parse(appleMapsUrl));
-    //   return;
-    // }
 
     // Open Google Maps in Browser
     if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
@@ -362,44 +534,80 @@ class ReportDetailsScreen extends StatelessWidget {
     // Show share dialog
     showModalBottomSheet(
       context: context,
+      backgroundColor: Colors.transparent,
       builder: (context) {
         return Container(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(24),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24),
+              topRight: Radius.circular(24),
+            ),
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
                 'Share Report',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
+                  color: Colors.black87,
                 ),
               ),
-              const SizedBox(height: 16),
-              ListTile(
-                leading: const Icon(Icons.copy),
-                title: const Text('Copy to clipboard'),
+              const SizedBox(height: 8),
+              const Text(
+                'Choose how you want to share this rescue report',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.black54,
+                ),
+              ),
+              const SizedBox(height: 24),
+              _buildShareOption(
+                context: context,
+                icon: Icons.copy,
+                title: 'Copy to clipboard',
+                subtitle: 'Copy report details to paste elsewhere',
                 onTap: () {
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Report details copied to clipboard'),
+                      behavior: SnackBarBehavior.floating,
+                      margin: EdgeInsets.all(16),
+                      content: Row(
+                        children: [
+                          Icon(Icons.check_circle, color: Colors.white),
+                          SizedBox(width: 16),
+                          Text('Report details copied to clipboard'),
+                        ],
+                      ),
+                      backgroundColor: Colors.green,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
                     ),
                   );
                   Clipboard.setData(ClipboardData(text: message));
                 },
               ),
-              ListTile(
-                leading: const Icon(Icons.message),
-                title: const Text('Share via message'),
+              _buildShareOption(
+                context: context,
+                icon: Icons.message,
+                title: 'Share via message',
+                subtitle: 'Send the report through SMS',
                 onTap: () {
                   Navigator.pop(context);
                   _shareViaSMS(message);
                 },
               ),
-              ListTile(
-                leading: const Icon(Icons.email),
-                title: const Text('Share via email'),
+              _buildShareOption(
+                context: context,
+                icon: Icons.email,
+                title: 'Share via email',
+                subtitle: 'Send the report through email',
                 onTap: () {
                   Navigator.pop(context);
                   _shareViaEmail(message);
@@ -409,6 +617,74 @@ class ReportDetailsScreen extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildShareOption({
+    required BuildContext context,
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.grey.withOpacity(0.05),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: Colors.grey.withOpacity(0.1),
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.orange.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                icon,
+                color: Colors.orange,
+                size: 24,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.black.withOpacity(0.5),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: Colors.black38,
+            ),
+          ],
+        ),
+      ),
     );
   }
 
