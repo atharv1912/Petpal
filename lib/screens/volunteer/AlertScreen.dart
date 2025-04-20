@@ -5,6 +5,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter_application_1/screens/volunteer/ReportDetailsScreen.dart';
 
+import 'package:permission_handler/permission_handler.dart';
+
 class AlertScreen extends StatefulWidget {
   const AlertScreen({super.key});
 
@@ -69,6 +71,25 @@ class _AlertScreenState extends State<AlertScreen> {
         InitializationSettings(android: initializationSettingsAndroid);
 
     await _notificationsPlugin.initialize(initializationSettings);
+
+    // Define the notification channel
+    const AndroidNotificationChannel channel = AndroidNotificationChannel(
+      'rescue_alerts_channel',
+      'Rescue Alerts',
+      description: 'Notifications for new rescue alerts',
+      importance: Importance.high,
+    );
+
+    final FlutterLocalNotificationsPlugin notificationsPlugin =
+        FlutterLocalNotificationsPlugin();
+
+    final AndroidFlutterLocalNotificationsPlugin? androidPlugin =
+        notificationsPlugin.resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>();
+
+    if (androidPlugin != null) {
+      await androidPlugin.createNotificationChannel(channel);
+    }
   }
 
   void _setupRealTimeListener() {
@@ -101,21 +122,22 @@ class _AlertScreenState extends State<AlertScreen> {
         .subscribe();
   }
 
-  void _showNewReportNotification(Map<String, dynamic> report) {
+  void _showNewReportNotification(Map<String, dynamic> report) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
       'rescue_alerts_channel',
       'Rescue Alerts',
+      channelDescription: 'Notifications for new rescue alerts',
       importance: Importance.high,
       priority: Priority.high,
-      showWhen: false,
+      playSound: true,
     );
 
     const NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
 
-    _notificationsPlugin.show(
-      0,
+    await _notificationsPlugin.show(
+      0, // Use a unique ID if needed
       'New Rescue Alert: ${report['type']}',
       'Location: ${report['lat']}, ${report['lng']}',
       platformChannelSpecifics,

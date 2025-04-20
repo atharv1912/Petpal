@@ -1,6 +1,6 @@
 -- Merging decision tree log ---
 application
-INJECTED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:2:5-33:19
+INJECTED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:6:5-67:19
 INJECTED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\debug\AndroidManifest.xml
 MERGED from [:firebase_core] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\firebase_core\intermediates\merged_manifest\debug\AndroidManifest.xml:7:5-13:19
 MERGED from [:firebase_core] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\firebase_core\intermediates\merged_manifest\debug\AndroidManifest.xml:7:5-13:19
@@ -41,8 +41,8 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\At
 	android:name
 		INJECTED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml
 manifest
-ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:1:1-50:12
-MERGED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:1:1-50:12
+ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:1:1-80:12
+MERGED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:1:1-80:12
 INJECTED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\debug\AndroidManifest.xml:1:1-10:12
 INJECTED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\debug\AndroidManifest.xml:1:1-10:12
 INJECTED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\debug\AndroidManifest.xml:1:1-10:12
@@ -129,28 +129,44 @@ MERGED from [com.getkeepsafe.relinker:relinker:1.4.5] C:\Users\Atharv\.gradle\ca
 		INJECTED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\debug\AndroidManifest.xml
 	xmlns:android
 		ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:1:11-69
+uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
+ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:2:5-81
+MERGED from [:flutter_local_notifications] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:7:5-81
+MERGED from [:flutter_local_notifications] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:7:5-81
+	android:name
+		ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:2:22-78
+uses-permission#android.permission.FOREGROUND_SERVICE
+ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:3:5-77
+	android:name
+		ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:3:22-74
+uses-permission#android.permission.POST_NOTIFICATIONS
+ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:4:5-77
+MERGED from [:flutter_local_notifications] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:11:5-77
+MERGED from [:flutter_local_notifications] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:11:5-77
+	android:name
+		ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:4:22-74
 queries
-ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:39:5-49:15
+ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:69:5-79:15
 intent#action:name:android.intent.action.PROCESS_TEXT+data:mimeType:text/plain
-ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:40:9-43:18
+ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:70:9-73:18
 action#android.intent.action.PROCESS_TEXT
-ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:41:13-72
+ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:71:13-72
 	android:name
-		ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:41:21-70
+		ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:71:21-70
 data
-ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:42:13-50
+ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:72:13-50
 	android:mimeType
-		ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:42:19-48
+		ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:72:19-48
 intent#action:name:android.intent.action.VIEW+data:scheme:geo
-ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:44:9-47:14
+ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:74:9-77:18
 action#android.intent.action.VIEW
-ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:45:9-61
+ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:75:13-65
 	android:name
-		ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:45:17-58
+		ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:75:21-62
 package#com.google.android.apps.maps
-ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:48:5-60
+ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:78:9-64
 	android:name
-		ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:48:14-57
+		ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\main\AndroidManifest.xml:78:18-61
 uses-permission#android.permission.INTERNET
 ADDED from C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\android\app\src\debug\AndroidManifest.xml:6:5-66
 	android:name
@@ -349,10 +365,6 @@ ADDED from [:firebase_core] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\fir
 		ADDED from [:firebase_core] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\firebase_core\intermediates\merged_manifest\debug\AndroidManifest.xml:11:17-82
 	android:name
 		ADDED from [:firebase_core] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\firebase_core\intermediates\merged_manifest\debug\AndroidManifest.xml:10:17-124
-uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
-ADDED from [:flutter_local_notifications] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:7:5-81
-	android:name
-		ADDED from [:flutter_local_notifications] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:7:22-78
 uses-permission#android.permission.VIBRATE
 ADDED from [:flutter_local_notifications] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:8:5-66
 	android:name
@@ -365,10 +377,6 @@ uses-permission#android.permission.SCHEDULE_EXACT_ALARM
 ADDED from [:flutter_local_notifications] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:10:5-79
 	android:name
 		ADDED from [:flutter_local_notifications] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:10:22-76
-uses-permission#android.permission.POST_NOTIFICATIONS
-ADDED from [:flutter_local_notifications] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:11:5-77
-	android:name
-		ADDED from [:flutter_local_notifications] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:11:22-74
 receiver#com.dexterous.flutterlocalnotifications.ActionBroadcastReceiver
 ADDED from [:flutter_local_notifications] C:\Users\Atharv\Desktop\CEP\petpal2\Petpal\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:14:9-16:40
 	android:exported
