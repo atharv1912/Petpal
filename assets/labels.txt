@@ -1,0 +1,6 @@
+background
+animal
+dog
+cat
+horse
+bird

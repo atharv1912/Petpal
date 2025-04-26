@@ -16,29 +16,20 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-
-    <queries>
-        <intent>
-            <action android:name="android.intent.action.PROCESS_TEXT" />
-
-            <data android:mimeType="text/plain" />
-        </intent>
-        <intent>
-            <action android:name="android.intent.action.VIEW" />
-
-            <data android:scheme="geo" />
-        </intent>
-
-        <package android:name="com.google.android.apps.maps" />
-    </queries>
+    <!-- Needed if you want to save images to external storage -->
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" /> <!-- Only needed for Android 10 and below -->
+    <!-- Required for camera features -->
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <permission
         android:name="com.example.flutter_application_1.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
@@ -47,19 +38,19 @@
     <uses-permission android:name="com.example.flutter_application_1.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
 
     <application
-        android:name="android.app.Application"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:debuggable="true"
         android:extractNativeLibs="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="flutter_application_1" >
+        android:label="Your App Name"
+        android:requestLegacyExternalStorage="true" > <!-- Needed for Android 10+ -->
+
         <activity
             android:name="com.example.flutter_application_1.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:exported="true"
             android:hardwareAccelerated="true"
             android:launchMode="singleTop"
-            android:taskAffinity=""
             android:theme="@style/LaunchTheme"
             android:windowSoftInputMode="adjustResize" >
             <meta-data
@@ -73,38 +64,15 @@
             </intent-filter>
         </activity>
 
-        <receiver
-            android:name="com.dexterous.flutterlocalnotifications.receivers.NotificationReceiver"
-            android:exported="true" />
-        <receiver
-            android:name="com.dexterous.flutterlocalnotifications.receivers.ActionBroadcastReceiver"
-            android:exported="true" />
-        <receiver
-            android:name="com.dexterous.flutterlocalnotifications.receivers.DismissedReceiver"
-            android:exported="true" />
-        <receiver
-            android:name="com.dexterous.flutterlocalnotifications.receivers.BootReceiver"
-            android:enabled="true"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </receiver>
-
-        <service
-            android:name="com.dexterous.flutterlocalnotifications.services.NotificationService"
-            android:exported="false"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
-        <service
-            android:name="com.dexterous.flutterlocalnotifications.services.ForegroundService"
-            android:exported="false"
-            android:foregroundServiceType="mediaPlayback" />
-
+        <!-- Don't delete the meta-data below if you're using TFLite -->
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        <!-- Required for tflite_flutter plugin -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
         <service
             android:name="com.google.firebase.components.ComponentDiscoveryService"
@@ -184,10 +152,6 @@
         <uses-library
             android:name="androidx.window.sidecar"
             android:required="false" />
-
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
 
         <provider
             android:name="androidx.startup.InitializationProvider"

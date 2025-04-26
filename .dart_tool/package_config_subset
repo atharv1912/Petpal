@@ -14,6 +14,10 @@ app_links_web
 3.2
 file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/app_links_web-1.0.4/
 file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/app_links_web-1.0.4/lib/
+archive
+3.0
+file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/archive-3.6.1/
+file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/archive-3.6.1/lib/
 args
 3.3
 file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/args-2.7.0/
@@ -32,8 +36,8 @@ file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/camera-0.10.6/
 file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/camera-0.10.6/lib/
 camera_android
 3.6
-file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/camera_android-0.10.10+1/
-file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/camera_android-0.10.10+1/lib/
+file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/camera_android-0.10.10+2/
+file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/camera_android-0.10.10+2/lib/
 camera_avfoundation
 3.4
 file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/camera_avfoundation-0.9.18+11/
@@ -198,6 +202,10 @@ http_parser
 3.4
 file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/http_parser-4.1.2/
 file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/http_parser-4.1.2/lib/
+image
+2.15
+file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/image-3.3.0/
+file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/image-3.3.0/lib/
 image_picker
 2.18
 file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/image_picker-0.8.9/
@@ -342,6 +350,10 @@ process
 2.14
 file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/process-4.2.4/
 file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/process-4.2.4/lib/
+quiver
+2.17
+file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/quiver-3.2.2/
+file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/quiver-3.2.2/lib/
 realtime_client
 3.0
 file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/realtime_client-2.4.1/
@@ -426,6 +438,10 @@ test_api
 3.4
 file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/test_api-0.7.3/
 file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/test_api-0.7.3/lib/
+tflite_flutter
+3.3
+file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/tflite_flutter-0.11.0/
+file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/tflite_flutter-0.11.0/lib/
 timeago
 2.12
 file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/timeago-3.2.2/

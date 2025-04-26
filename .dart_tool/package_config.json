@@ -26,6 +26,12 @@
       "languageVersion": "3.2"
     },
     {
+      "name": "archive",
+      "rootUri": "file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/archive-3.6.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "args",
       "rootUri": "file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/args-2.7.0",
       "packageUri": "lib/",
@@ -51,7 +57,7 @@
     },
     {
       "name": "camera_android",
-      "rootUri": "file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/camera_android-0.10.10+1",
+      "rootUri": "file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/camera_android-0.10.10+2",
       "packageUri": "lib/",
       "languageVersion": "3.6"
     },
@@ -320,6 +326,12 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "image",
+      "rootUri": "file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/image-3.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
       "name": "image_picker",
       "rootUri": "file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/image_picker-0.8.9",
       "packageUri": "lib/",
@@ -536,6 +548,12 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "quiver",
+      "rootUri": "file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/quiver-3.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "realtime_client",
       "rootUri": "file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/realtime_client-2.4.1",
       "packageUri": "lib/",
@@ -668,6 +686,12 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "tflite_flutter",
+      "rootUri": "file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/tflite_flutter-0.11.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
       "name": "timeago",
       "rootUri": "file:///C:/Users/Atharv/AppData/Local/Pub/Cache/hosted/pub.dev/timeago-3.2.2",
       "packageUri": "lib/",
@@ -794,7 +818,7 @@
       "languageVersion": "3.6"
     }
   ],
-  "generated": "2025-03-31T08:02:36.526071Z",
+  "generated": "2025-04-26T06:05:32.470323Z",
   "generator": "pub",
   "generatorVersion": "3.6.1",
   "flutterRoot": "file:///C:/flutter",
