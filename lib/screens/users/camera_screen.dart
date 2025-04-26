@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../auth/SupabaseServices.dart';
 import 'package:flutter_application_1/screens/users/permission_handler.dart';
 import 'package:flutter_application_1/screens/users/HomePage.dart';
+import 'package:google_mlkit_image_labeling/google_mlkit_image_labeling.dart';
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({super.key});
@@ -14,8 +16,7 @@ class CameraScreen extends StatefulWidget {
   _CameraScreenState createState() => _CameraScreenState();
 }
 
-class _CameraScreenState extends State<CameraScreen>
-    with WidgetsBindingObserver {
+class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver {
   CameraController? _controller;
   XFile? _imageFile;
   final _formKey = GlobalKey<FormState>();
@@ -26,6 +27,7 @@ class _CameraScreenState extends State<CameraScreen>
   bool _isUploading = false;
   bool _isCameraInitialized = false;
   bool _locationPermissionGranted = false;
+  final _imageLabeler = ImageLabeler(options: ImageLabelerOptions(confidenceThreshold: 0.7));
 
   @override
   void initState() {
@@ -37,6 +39,7 @@ class _CameraScreenState extends State<CameraScreen>
 
   @override
   void dispose() {
+    _imageLabeler.close();
     WidgetsBinding.instance.removeObserver(this);
     _controller?.dispose();
     super.dispose();
@@ -44,25 +47,19 @@ class _CameraScreenState extends State<CameraScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (_controller == null || !_controller!.value.isInitialized) {
-      return;
-    }
-
+    if (_controller == null || !_controller!.value.isInitialized) return;
+    
     if (state == AppLifecycleState.inactive) {
       _controller?.dispose();
-    } else if (state == AppLifecycleState.resumed) {
-      if (_controller != null) {
-        _initializeCamera();
-      }
+    } else if (state == AppLifecycleState.resumed && _controller != null) {
+      _initializeCamera();
     }
   }
 
   Future<void> _initializeCamera() async {
     try {
       final cameras = await availableCameras();
-      if (cameras.isEmpty) {
-        throw Exception('No cameras available');
-      }
+      if (cameras.isEmpty) throw Exception('No cameras available');
 
       final camera = cameras.firstWhere(
         (camera) => camera.lensDirection == CameraLensDirection.back,
@@ -78,9 +75,7 @@ class _CameraScreenState extends State<CameraScreen>
       await _controller?.initialize();
       if (!mounted) return;
 
-      setState(() {
-        _isCameraInitialized = _controller?.value.isInitialized ?? false;
-      });
+      setState(() => _isCameraInitialized = _controller?.value.isInitialized ?? false);
     } catch (e) {
       _showErrorSnackbar('Failed to initialize camera: ${e.toString()}');
     }
@@ -94,9 +89,7 @@ class _CameraScreenState extends State<CameraScreen>
             permission == LocationPermission.whileInUse;
       });
 
-      if (_locationPermissionGranted) {
-        await _getCurrentLocation();
-      }
+      if (_locationPermissionGranted) await _getCurrentLocation();
     } catch (e) {
       _showErrorSnackbar('Location permission error: ${e.toString()}');
     }
@@ -107,9 +100,7 @@ class _CameraScreenState extends State<CameraScreen>
       final position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.best,
       );
-      setState(() {
-        _currentPosition = position;
-      });
+      setState(() => _currentPosition = position);
     } catch (e) {
       _showErrorSnackbar('Failed to get location: ${e.toString()}');
     }
@@ -125,11 +116,54 @@ class _CameraScreenState extends State<CameraScreen>
       final image = await _controller!.takePicture();
       if (!mounted) return;
 
-      setState(() {
-        _imageFile = image;
-      });
+      final isAnimalPhoto = await isAnimal(File(image.path));
+      if (!isAnimalPhoto) {
+        _showErrorSnackbar('Please capture an animal in the photo');
+        return;
+      }
+
+      setState(() => _imageFile = image);
     } catch (e) {
       _showErrorSnackbar('Failed to take photo: ${e.toString()}');
+    }
+  }
+
+  Future<void> _pickImageFromGallery() async {
+    try {
+      final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (pickedFile == null) return;
+
+      final isAnimalPhoto = await isAnimal(File(pickedFile.path));
+      if (!isAnimalPhoto) {
+        _showErrorSnackbar('Please select a photo containing an animal');
+        return;
+      }
+
+      setState(() => _imageFile = pickedFile);
+    } catch (e) {
+      _showErrorSnackbar('Failed to pick image: ${e.toString()}');
+    }
+  }
+
+  Future<bool> isAnimal(File image) async {
+    try {
+      final inputImage = InputImage.fromFile(image);
+      final labels = await _imageLabeler.processImage(inputImage);
+      
+      for (final label in labels) {
+        final labelText = label.label.toLowerCase();
+        if (labelText.contains('animal') || 
+            labelText.contains('dog') || 
+            labelText.contains('cat') ||
+            labelText.contains('bird') ||
+            labelText.contains('mammal')) {
+          return true;
+        }
+      }
+      return false;
+    } catch (e) {
+      _showErrorSnackbar('Error analyzing image');
+      return false;
     }
   }
 
@@ -153,9 +187,7 @@ class _CameraScreenState extends State<CameraScreen>
       await _getCurrentLocation();
     }
 
-    setState(() {
-      _isUploading = true;
-    });
+    setState(() => _isUploading = true);
 
     try {
       final supabaseService = SupabaseService();
@@ -166,10 +198,7 @@ class _CameraScreenState extends State<CameraScreen>
         return;
       }
 
-      final imageUrl = await supabaseService.uploadReportImage(
-        File(_imageFile!.path),
-      );
-
+      final imageUrl = await supabaseService.uploadReportImage(File(_imageFile!.path));
       await supabaseService.insertReport(
         imageUrl: imageUrl,
         condition: _animalCondition,
@@ -180,19 +209,11 @@ class _CameraScreenState extends State<CameraScreen>
       );
 
       if (!mounted) return;
-      Navigator.pop(context, true);
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      ); // Return success
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomePage()));
     } catch (e) {
       _showErrorSnackbar('Failed to submit report: ${e.toString()}');
     } finally {
-      if (mounted) {
-        setState(() {
-          _isUploading = false;
-        });
-      }
+      if (mounted) setState(() => _isUploading = false);
     }
   }
 
@@ -202,37 +223,51 @@ class _CameraScreenState extends State<CameraScreen>
         content: Text(message),
         backgroundColor: Colors.red,
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        margin: EdgeInsets.all(10),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        margin: const EdgeInsets.all(10),
       ),
     );
   }
 
-  void _retakePhoto() {
-    setState(() {
-      _imageFile = null;
-    });
+  void _retakePhoto() => setState(() => _imageFile = null);
+
+  Future<void> _confirmExit() async {
+    if (_imageFile != null) {
+      final shouldExit = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Discard Report?'),
+          content: const Text('Are you sure you want to go back? Your progress will be lost.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('No'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Yes'),
+            ),
+          ],
+        ),
+      );
+
+      if (shouldExit ?? false) {
+        if (mounted) Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomePage()));
+      }
+    } else {
+      if (mounted) Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomePage()));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Scaffold(
       extendBodyBehindAppBar: _imageFile == null,
       appBar: AppBar(
-        title: Text(
-          'Report Animal',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        elevation: _imageFile == null ? 0 : 2,
-        backgroundColor: _imageFile == null
-            ? Colors.transparent.withOpacity(0.2)
-            : theme.appBarTheme.backgroundColor,
-        iconTheme: IconThemeData(
-          color: _imageFile == null ? Colors.white : null,
+        title: _imageFile == null ? null : const Text('Report Animal'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: _confirmExit,
         ),
         actions: [
           if (_imageFile != null)
@@ -244,21 +279,14 @@ class _CameraScreenState extends State<CameraScreen>
         ],
       ),
       body: _buildBody(),
-      floatingActionButton: _imageFile == null
-          ? Container(
-              height: 70,
-              width: 70,
-              margin: EdgeInsets.only(bottom: 16),
-              child: _buildCameraButton(),
-            )
-          : null,
+      floatingActionButton: _imageFile == null ? _buildCameraControls() : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
   Widget _buildBody() {
     if (!_isCameraInitialized && _imageFile == null) {
-      return Center(
+      return const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -269,7 +297,6 @@ class _CameraScreenState extends State<CameraScreen>
         ),
       );
     }
-
     return _imageFile == null ? _buildCameraPreview() : _buildReportForm();
   }
 
@@ -283,32 +310,23 @@ class _CameraScreenState extends State<CameraScreen>
       child: Stack(
         fit: StackFit.expand,
         children: [
-          // Camera preview that fills the screen but maintains aspect ratio
           AspectRatio(
             aspectRatio: _controller!.value.aspectRatio,
             child: CameraPreview(_controller!),
           ),
-
-          // Grid overlay
-          Positioned.fill(
-            child: CustomPaint(
-              painter: GridPainter(),
-            ),
-          ),
-
-          // Guidance text
+          Positioned.fill(child: CustomPaint(painter: GridPainter())),
           Positioned(
             bottom: 100,
             left: 0,
             right: 0,
             child: Center(
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
                   color: Colors.black.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Text(
+                child: const Text(
                   'Align animal within the grid',
                   style: TextStyle(
                     color: Colors.white,
@@ -324,57 +342,55 @@ class _CameraScreenState extends State<CameraScreen>
     );
   }
 
-  Widget _buildCameraButton() {
-    return FloatingActionButton(
-      onPressed: _takePhoto,
-      tooltip: 'Take photo',
-      elevation: 5,
-      highlightElevation: 8,
-      child: const Icon(
-        Icons.camera_alt,
-        size: 32,
+  Widget _buildCameraControls() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          FloatingActionButton(
+            heroTag: 'gallery',
+            onPressed: _pickImageFromGallery,
+            child: const Icon(Icons.photo_library),
+            mini: true,
+          ),
+          const SizedBox(width: 20),
+          FloatingActionButton(
+            heroTag: 'capture',
+            onPressed: _takePhoto,
+            child: const Icon(Icons.camera_alt),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildReportForm() {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Colors.white, Colors.grey.shade100],
-        ),
-      ),
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _buildImagePreview(),
-              const SizedBox(height: 24),
-              Text(
-                'Report Details',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 16),
-              _buildAnimalTypeField(),
-              const SizedBox(height: 16),
-              _buildConditionField(),
-              const SizedBox(height: 16),
-              _buildNotesField(),
-              const SizedBox(height: 24),
-              _buildLocationInfo(),
-              const SizedBox(height: 32),
-              _buildSubmitButton(),
-              const SizedBox(height: 20),
-            ],
-          ),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _buildImagePreview(),
+            const SizedBox(height: 16),
+            const Text(
+              'Report Details',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            _buildAnimalTypeField(),
+            const SizedBox(height: 16),
+            _buildConditionField(),
+            const SizedBox(height: 16),
+            _buildNotesField(),
+            const SizedBox(height: 24),
+            _buildLocationInfo(),
+            const SizedBox(height: 32),
+            _buildSubmitButton(),
+            const SizedBox(height: 20),
+          ],
         ),
       ),
     );
@@ -382,16 +398,14 @@ class _CameraScreenState extends State<CameraScreen>
 
   Widget _buildImagePreview() {
     return Container(
-      height: 250,
-      width: double.infinity,
+      height: 200,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.2),
             blurRadius: 10,
-            spreadRadius: 1,
-            offset: Offset(0, 5),
+            offset: const Offset(0, 5),
           ),
         ],
       ),
@@ -410,13 +424,11 @@ class _CameraScreenState extends State<CameraScreen>
       decoration: InputDecoration(
         labelText: 'Animal Type*',
         hintText: 'e.g., Dog, Cat, Bird',
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         filled: true,
         fillColor: Colors.white,
-        prefixIcon: Icon(Icons.pets),
-        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        prefixIcon: const Icon(Icons.pets),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       ),
       validator: (value) => value?.isEmpty ?? true ? 'Required' : null,
       onChanged: (value) => _animalType = value,
@@ -428,13 +440,11 @@ class _CameraScreenState extends State<CameraScreen>
       decoration: InputDecoration(
         labelText: 'Condition*',
         hintText: 'e.g., Injured, Healthy, Needs help',
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         filled: true,
         fillColor: Colors.white,
-        prefixIcon: Icon(Icons.healing),
-        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        prefixIcon: const Icon(Icons.healing),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       ),
       validator: (value) => value?.isEmpty ?? true ? 'Required' : null,
       onChanged: (value) => _animalCondition = value,
@@ -446,13 +456,11 @@ class _CameraScreenState extends State<CameraScreen>
       decoration: InputDecoration(
         labelText: 'Additional Notes',
         hintText: 'Any other details to help responders...',
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         filled: true,
         fillColor: Colors.white,
-        prefixIcon: Icon(Icons.note),
-        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        prefixIcon: const Icon(Icons.note),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         alignLabelWithHint: true,
       ),
       maxLines: 3,
@@ -473,8 +481,7 @@ class _CameraScreenState extends State<CameraScreen>
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
             blurRadius: 8,
-            spreadRadius: 1,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -485,7 +492,7 @@ class _CameraScreenState extends State<CameraScreen>
           Row(
             children: [
               Icon(Icons.location_on, color: Colors.blue.shade700),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Text(
                 'Location Information',
                 style: TextStyle(
@@ -498,7 +505,7 @@ class _CameraScreenState extends State<CameraScreen>
           ),
           const SizedBox(height: 12),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(8),
@@ -508,7 +515,7 @@ class _CameraScreenState extends State<CameraScreen>
                   ? 'Lat: ${_currentPosition!.latitude.toStringAsFixed(4)}, '
                       'Lng: ${_currentPosition!.longitude.toStringAsFixed(4)}'
                   : 'Location not available',
-              style: TextStyle(fontSize: 15),
+              style: const TextStyle(fontSize: 15),
             ),
           ),
           if (!_locationPermissionGranted)
@@ -516,13 +523,11 @@ class _CameraScreenState extends State<CameraScreen>
               padding: const EdgeInsets.only(top: 12),
               child: ElevatedButton.icon(
                 onPressed: _checkLocationPermission,
-                icon: Icon(Icons.my_location),
-                label: Text('Enable Location'),
+                icon: const Icon(Icons.my_location),
+                label: const Text('Enable Location'),
                 style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                 ),
               ),
             ),
@@ -536,16 +541,14 @@ class _CameraScreenState extends State<CameraScreen>
       onPressed: _isUploading ? null : _submitReport,
       style: ElevatedButton.styleFrom(
         padding: const EdgeInsets.symmetric(vertical: 16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         elevation: 4,
       ),
       child: _isUploading
           ? Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 24,
                   width: 24,
                   child: CircularProgressIndicator(
@@ -553,13 +556,13 @@ class _CameraScreenState extends State<CameraScreen>
                     valueColor: AlwaysStoppedAnimation(Colors.white),
                   ),
                 ),
-                SizedBox(width: 12),
-                Text('UPLOADING...'),
+                const SizedBox(width: 12),
+                const Text('UPLOADING...'),
               ],
             )
           : Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: const [
                 Icon(Icons.send),
                 SizedBox(width: 8),
                 Text(
@@ -576,7 +579,6 @@ class _CameraScreenState extends State<CameraScreen>
   }
 }
 
-// Custom painter for drawing the camera grid overlay
 class GridPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
@@ -585,41 +587,26 @@ class GridPainter extends CustomPainter {
       ..strokeWidth = 1.0
       ..style = PaintingStyle.stroke;
 
-    // Draw horizontal lines
-    final int horizontalLines = 2;
-    final double horizontalSpacing = size.height / (horizontalLines + 1);
-    for (int i = 1; i <= horizontalLines; i++) {
-      final double y = horizontalSpacing * i;
-      canvas.drawLine(
-        Offset(0, y),
-        Offset(size.width, y),
-        paint,
-      );
+    // Draw grid lines
+    for (int i = 1; i <= 2; i++) {
+      // Horizontal
+      final y = size.height / 3 * i;
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
+      // Vertical
+      final x = size.width / 3 * i;
+      canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
     }
 
-    // Draw vertical lines
-    final int verticalLines = 2;
-    final double verticalSpacing = size.width / (verticalLines + 1);
-    for (int i = 1; i <= verticalLines; i++) {
-      final double x = verticalSpacing * i;
-      canvas.drawLine(
-        Offset(x, 0),
-        Offset(x, size.height),
-        paint,
-      );
-    }
-
-    // Draw a center focus area (rule of thirds)
-    final double focusSize = size.width * 0.5;
-    final double focusX = (size.width - focusSize) / 2;
-    final double focusY = (size.height - focusSize) / 2;
-
-    final focusRect = Rect.fromLTWH(focusX, focusY, focusSize, focusSize);
+    // Center focus area
+    final focusSize = size.width * 0.5;
+    final focusRect = Rect.fromCenter(
+      center: Offset(size.width/2, size.height/2),
+      width: focusSize,
+      height: focusSize,
+    );
     canvas.drawRect(focusRect, paint);
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
-  }
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }

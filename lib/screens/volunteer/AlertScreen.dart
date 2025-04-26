@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/auth/SupabaseServices.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter_application_1/screens/volunteer/ReportDetailsScreen.dart';
@@ -17,8 +16,6 @@ class AlertScreen extends StatefulWidget {
 class _AlertScreenState extends State<AlertScreen> {
   final SupabaseService _supabaseService = SupabaseService();
   late Stream<List<Map<String, dynamic>>> _reportsStream;
-  final FlutterLocalNotificationsPlugin _notificationsPlugin =
-      FlutterLocalNotificationsPlugin();
   bool _showOnlyPending = true;
   late RealtimeChannel _reportsChannel;
   bool _isInitialLoad = true;
@@ -26,7 +23,6 @@ class _AlertScreenState extends State<AlertScreen> {
   @override
   void initState() {
     super.initState();
-    _initializeNotifications();
     _setupRealTimeListener();
     _setupReportsStream();
   }
@@ -46,14 +42,12 @@ class _AlertScreenState extends State<AlertScreen> {
             ? _supabaseService.getPendingReportsStream()
             : _supabaseService.getAllReportsStream())
         .map<List<Map<String, dynamic>>>((reports) {
-      // Explicit cast to List<Map<String, dynamic>>
       return (reports as List).cast<Map<String, dynamic>>();
     }).handleError((error) {
       debugPrint('Error in reports stream: $error');
       return <Map<String, dynamic>>[];
     });
 
-    // Force UI update when stream is ready
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         setState(() {
@@ -61,35 +55,6 @@ class _AlertScreenState extends State<AlertScreen> {
         });
       }
     });
-  }
-
-  Future<void> _initializeNotifications() async {
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-
-    const InitializationSettings initializationSettings =
-        InitializationSettings(android: initializationSettingsAndroid);
-
-    await _notificationsPlugin.initialize(initializationSettings);
-
-    // Define the notification channel
-    const AndroidNotificationChannel channel = AndroidNotificationChannel(
-      'rescue_alerts_channel',
-      'Rescue Alerts',
-      description: 'Notifications for new rescue alerts',
-      importance: Importance.high,
-    );
-
-    final FlutterLocalNotificationsPlugin notificationsPlugin =
-        FlutterLocalNotificationsPlugin();
-
-    final AndroidFlutterLocalNotificationsPlugin? androidPlugin =
-        notificationsPlugin.resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>();
-
-    if (androidPlugin != null) {
-      await androidPlugin.createNotificationChannel(channel);
-    }
   }
 
   void _setupRealTimeListener() {
@@ -102,17 +67,10 @@ class _AlertScreenState extends State<AlertScreen> {
           callback: (payload) {
             if (!mounted) return;
 
-            // Only refresh if the change affects our current filter
             if (_showOnlyPending &&
                 payload.eventType == 'UPDATE' &&
                 payload.newRecord['status'] != 'pending') {
               return;
-            }
-
-            // Show notification for new pending reports
-            if (payload.eventType == 'INSERT' &&
-                payload.newRecord['status'] == 'pending') {
-              _showNewReportNotification(payload.newRecord);
             }
 
             // Refresh the stream
@@ -120,29 +78,6 @@ class _AlertScreenState extends State<AlertScreen> {
           },
         )
         .subscribe();
-  }
-
-  void _showNewReportNotification(Map<String, dynamic> report) async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-      'rescue_alerts_channel',
-      'Rescue Alerts',
-      channelDescription: 'Notifications for new rescue alerts',
-      importance: Importance.high,
-      priority: Priority.high,
-      playSound: true,
-    );
-
-    const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
-
-    await _notificationsPlugin.show(
-      0, // Use a unique ID if needed
-      'New Rescue Alert: ${report['type']}',
-      'Location: ${report['lat']}, ${report['lng']}',
-      platformChannelSpecifics,
-      payload: report['id'].toString(),
-    );
   }
 
   @override
@@ -205,7 +140,6 @@ class _AlertScreenState extends State<AlertScreen> {
             : StreamBuilder<List<Map<String, dynamic>>>(
                 stream: _reportsStream,
                 builder: (context, snapshot) {
-                  // Handle connection state
                   if (snapshot.connectionState == ConnectionState.waiting &&
                       !snapshot.hasData) {
                     return const Center(
@@ -215,7 +149,6 @@ class _AlertScreenState extends State<AlertScreen> {
                     );
                   }
 
-                  // Handle errors
                   if (snapshot.hasError) {
                     return Center(
                       child: Column(
@@ -240,7 +173,6 @@ class _AlertScreenState extends State<AlertScreen> {
                     );
                   }
 
-                  // Get filtered reports
                   final reports = _showOnlyPending
                       ? snapshot.data
                               ?.where((r) => r['status'] == 'pending')
