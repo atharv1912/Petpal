@@ -1,4 +1,5 @@
 {
     "cmake.sourceDirectory": "C:/Users/Atharv/Downloads/Petpal/Petpal/linux",
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "disabled",
+    "cmake.ignoreCMakeListsMissing": true
 }
