@@ -58,26 +58,29 @@ class _AlertScreenState extends State<AlertScreen> {
   }
 
   void _setupRealTimeListener() {
-    _reportsChannel = _supabaseService.supabase
-        .channel('reports_changes')
-        .onPostgresChanges(
-          event: PostgresChangeEvent.all,
-          schema: 'public',
-          table: 'reports',
-          callback: (payload) {
-            if (!mounted) return;
+    final supabase = _supabaseService.supabase;
+    _reportsChannel = supabase.channel('reports_changes');
 
-            if (_showOnlyPending &&
-                payload.eventType == 'UPDATE' &&
-                payload.newRecord['status'] != 'pending') {
-              return;
-            }
+    _reportsChannel.on(
+      RealtimeListenTypes.postgresChanges,
+      ChannelFilter(
+        event: '*', // Listen to all events: INSERT, UPDATE, DELETE
+        schema: 'public',
+        table: 'reports',
+      ),
+      (payload, [ref]) {
+        if (!mounted) return;
 
-            // Refresh the stream
-            _setupReportsStream();
-          },
-        )
-        .subscribe();
+        if (_showOnlyPending &&
+            payload.eventType == 'UPDATE' &&
+            payload.newRecord['status'] != 'pending') {
+          return;
+        }
+
+        // Refresh the stream
+        _setupReportsStream();
+      },
+    ).subscribe();
   }
 
   @override

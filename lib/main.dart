@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/service/notification_controller.dart';
+import 'package:flutter_application_1/service/volunteer_notification.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_application_1/screens/users/LoginPage.dart';
 import 'package:flutter_application_1/screens/users/HomePage.dart';
 import 'package:flutter_application_1/screens/volunteer/VolunteerDashboard.dart';
+import 'package:flutter_application_1/service/notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,10 +16,10 @@ void main() async {
     url: 'https://zuicmikqkapgodejaxob.supabase.co',
     anonKey:
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1aWNtaWtxa2FwZ29kZWpheG9iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI3MDU1NzUsImV4cCI6MjA1ODI4MTU3NX0.cboQllH0cO6llyjbLHIRCgaGvKHfjGIOmrj7bMpzWt0',
-    authOptions: const FlutterAuthClientOptions(
-      authFlowType: AuthFlowType.pkce,
-    ),
+    // Removed invalid authOptions parameter
   );
+  await NotificationService.initialize();
+  await VolunteerNotifier.initialize();
 
   runApp(const MyApp());
 }
@@ -52,6 +56,9 @@ class _AuthWrapperState extends State<AuthWrapper> {
   void initState() {
     super.initState();
     _initializeAuth();
+    AwesomeNotifications().setListeners(
+      onActionReceivedMethod: NotificationController.onActionReceivedMethod,
+    );
   }
 
   Future<void> _initializeAuth() async {

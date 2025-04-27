@@ -4,6 +4,7 @@ import 'package:flutter_application_1/auth/SupabaseServices.dart';
 import 'package:flutter_application_1/screens/users/camera_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_application_1/screens/users/profile-page.dart';
+import 'package:flutter_application_1/screens/users/community_page.dart'; // Add this import
 
 final supabase = Supabase.instance.client;
 
@@ -16,7 +17,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final SupabaseService _supabaseService = SupabaseService();
-  int _selectedIndex = 0;
+  int _selectedIndex = 1; // Changed to 1 to make HomePage the center
 
   void _onItemTapped(int index) {
     setState(() {
@@ -24,23 +25,30 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  // Method to navigate to camera screen from home page
+  void _navigateToCamera() {
+    setState(() {
+      _selectedIndex = 2; // Camera is now at index 2
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _selectedIndex == 0
-          ? _buildHomeContent()
-          : _selectedIndex == 1
-              ? CameraScreen()
-              : ProfilePage(),
+      body: _getSelectedPage(),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.people),
+            label: 'Community',
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.camera_alt),
-            label: 'Camera',
+            label: 'Report',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
@@ -51,8 +59,24 @@ class _HomePageState extends State<HomePage> {
         selectedItemColor: Colors.orange,
         onTap: _onItemTapped,
         backgroundColor: Color(0xFFFFF4E0),
+        type: BottomNavigationBarType.fixed,
       ),
     );
+  }
+
+  Widget _getSelectedPage() {
+    switch (_selectedIndex) {
+      case 0:
+        return CommunityPage();
+      case 1:
+        return _buildHomeContent();
+      case 2:
+        return CameraScreen();
+      case 3:
+        return ProfilePage();
+      default:
+        return _buildHomeContent();
+    }
   }
 
   @override
@@ -113,7 +137,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               SizedBox(height: 40),
-              
+
               // Main Title
               Text(
                 'Help Animals in Need',
@@ -125,7 +149,7 @@ class _HomePageState extends State<HomePage> {
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 16),
-              
+
               // Subtitle
               Text(
                 'Your photos can save lives',
@@ -135,17 +159,17 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               SizedBox(height: 40),
-              
+
               // Action Cards
               _buildActionCard(
                 icon: Icons.camera_alt,
                 title: 'Report an Animal',
                 description: 'Take a photo of an injured or stray animal',
                 color: Colors.orange,
-                onTap: () => _onItemTapped(1), // Navigate to camera
+                onTap: _navigateToCamera, // Updated to use the new method
               ),
               SizedBox(height: 20),
-              
+
               _buildActionCard(
                 icon: Icons.info,
                 title: 'Learn More',
@@ -156,7 +180,7 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
               SizedBox(height: 40),
-              
+
               // Quick Stats
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,

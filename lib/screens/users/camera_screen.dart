@@ -8,6 +8,7 @@ import '../../auth/SupabaseServices.dart';
 import 'package:flutter_application_1/screens/users/permission_handler.dart';
 import 'package:flutter_application_1/screens/users/HomePage.dart';
 import 'package:google_mlkit_image_labeling/google_mlkit_image_labeling.dart';
+import 'package:flutter_application_1/service/notification_service.dart';
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({super.key});
@@ -16,7 +17,8 @@ class CameraScreen extends StatefulWidget {
   _CameraScreenState createState() => _CameraScreenState();
 }
 
-class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver {
+class _CameraScreenState extends State<CameraScreen>
+    with WidgetsBindingObserver {
   CameraController? _controller;
   XFile? _imageFile;
   final _formKey = GlobalKey<FormState>();
@@ -27,7 +29,8 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
   bool _isUploading = false;
   bool _isCameraInitialized = false;
   bool _locationPermissionGranted = false;
-  final _imageLabeler = ImageLabeler(options: ImageLabelerOptions(confidenceThreshold: 0.7));
+  final _imageLabeler =
+      ImageLabeler(options: ImageLabelerOptions(confidenceThreshold: 0.7));
 
   @override
   void initState() {
@@ -48,7 +51,7 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (_controller == null || !_controller!.value.isInitialized) return;
-    
+
     if (state == AppLifecycleState.inactive) {
       _controller?.dispose();
     } else if (state == AppLifecycleState.resumed && _controller != null) {
@@ -75,7 +78,8 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
       await _controller?.initialize();
       if (!mounted) return;
 
-      setState(() => _isCameraInitialized = _controller?.value.isInitialized ?? false);
+      setState(() =>
+          _isCameraInitialized = _controller?.value.isInitialized ?? false);
     } catch (e) {
       _showErrorSnackbar('Failed to initialize camera: ${e.toString()}');
     }
@@ -130,7 +134,8 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
 
   Future<void> _pickImageFromGallery() async {
     try {
-      final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+      final pickedFile =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
       if (pickedFile == null) return;
 
       final isAnimalPhoto = await isAnimal(File(pickedFile.path));
@@ -149,11 +154,11 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
     try {
       final inputImage = InputImage.fromFile(image);
       final labels = await _imageLabeler.processImage(inputImage);
-      
+
       for (final label in labels) {
         final labelText = label.label.toLowerCase();
-        if (labelText.contains('animal') || 
-            labelText.contains('dog') || 
+        if (labelText.contains('animal') ||
+            labelText.contains('dog') ||
             labelText.contains('cat') ||
             labelText.contains('bird') ||
             labelText.contains('mammal')) {
@@ -198,7 +203,8 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
         return;
       }
 
-      final imageUrl = await supabaseService.uploadReportImage(File(_imageFile!.path));
+      final imageUrl =
+          await supabaseService.uploadReportImage(File(_imageFile!.path));
       await supabaseService.insertReport(
         imageUrl: imageUrl,
         condition: _animalCondition,
@@ -207,9 +213,16 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
         lat: _currentPosition?.latitude ?? 0,
         lng: _currentPosition?.longitude ?? 0,
       );
+      // Send notification to volunteers
+      await NotificationService.notifyVolunteers(
+        title: 'New Animal Report!',
+        body:
+            'A ${_animalType.toLowerCase()} needs help (${_animalCondition.toLowerCase()})',
+      );
 
       if (!mounted) return;
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomePage()));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => HomePage()));
     } catch (e) {
       _showErrorSnackbar('Failed to submit report: ${e.toString()}');
     } finally {
@@ -237,7 +250,8 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Discard Report?'),
-          content: const Text('Are you sure you want to go back? Your progress will be lost.'),
+          content: const Text(
+              'Are you sure you want to go back? Your progress will be lost.'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
@@ -252,10 +266,14 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
       );
 
       if (shouldExit ?? false) {
-        if (mounted) Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomePage()));
+        if (mounted)
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (_) => HomePage()));
       }
     } else {
-      if (mounted) Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomePage()));
+      if (mounted)
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (_) => HomePage()));
     }
   }
 
@@ -321,7 +339,8 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
             right: 0,
             child: Center(
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
                   color: Colors.black.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(20),
@@ -351,8 +370,8 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
           FloatingActionButton(
             heroTag: 'gallery',
             onPressed: _pickImageFromGallery,
-            child: const Icon(Icons.photo_library),
             mini: true,
+            child: const Icon(Icons.photo_library),
           ),
           const SizedBox(width: 20),
           FloatingActionButton(
@@ -428,7 +447,8 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
         filled: true,
         fillColor: Colors.white,
         prefixIcon: const Icon(Icons.pets),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       ),
       validator: (value) => value?.isEmpty ?? true ? 'Required' : null,
       onChanged: (value) => _animalType = value,
@@ -444,7 +464,8 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
         filled: true,
         fillColor: Colors.white,
         prefixIcon: const Icon(Icons.healing),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       ),
       validator: (value) => value?.isEmpty ?? true ? 'Required' : null,
       onChanged: (value) => _animalCondition = value,
@@ -460,7 +481,8 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
         filled: true,
         fillColor: Colors.white,
         prefixIcon: const Icon(Icons.note),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         alignLabelWithHint: true,
       ),
       maxLines: 3,
@@ -526,8 +548,10 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
                 icon: const Icon(Icons.my_location),
                 label: const Text('Enable Location'),
                 style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                 ),
               ),
             ),
@@ -600,7 +624,7 @@ class GridPainter extends CustomPainter {
     // Center focus area
     final focusSize = size.width * 0.5;
     final focusRect = Rect.fromCenter(
-      center: Offset(size.width/2, size.height/2),
+      center: Offset(size.width / 2, size.height / 2),
       width: focusSize,
       height: focusSize,
     );

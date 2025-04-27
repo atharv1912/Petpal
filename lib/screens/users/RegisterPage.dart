@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/auth/SupabaseServices.dart';
-import 'package:flutter_application_1/screens/users/LoginPage.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -30,7 +29,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         width: double.infinity,
         height: double.infinity,
         decoration: BoxDecoration(
-          color: Color(0xFFFFFAE7), // Light cream background matching login page
+          color:
+              Color(0xFFFFFAE7), // Light cream background matching login page
         ),
         child: SafeArea(
           child: Column(
@@ -94,22 +94,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             hintText: "Password",
                             filled: true,
                             fillColor: Colors.white,
-                            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 16),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.indigo[200]!),
+                              borderSide:
+                                  BorderSide(color: Colors.indigo[200]!),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.indigo[200]!),
+                              borderSide:
+                                  BorderSide(color: Colors.indigo[200]!),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.indigo[900]!, width: 2),
+                              borderSide: BorderSide(
+                                  color: Colors.indigo[900]!, width: 2),
                             ),
                             suffixIcon: IconButton(
                               icon: Icon(
-                                _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                                _obscurePassword
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
                                 color: Colors.indigo[400],
                               ),
                               onPressed: () {
@@ -135,15 +141,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               isExpanded: true,
                               value: _selectedRole,
                               hint: Text("Select Role"),
-                              icon: Icon(Icons.arrow_drop_down, color: Colors.indigo[400]),
-                              style: TextStyle(color: Colors.black87, fontSize: 16),
+                              icon: Icon(Icons.arrow_drop_down,
+                                  color: Colors.indigo[400]),
+                              style: TextStyle(
+                                  color: Colors.black87, fontSize: 16),
                               onChanged: (String? newValue) {
                                 setState(() {
                                   _selectedRole = newValue!;
                                 });
                               },
-                              items: <String>['user', 'volunteer', 'ngo']
-                                  .map<DropdownMenuItem<String>>((String value) {
+                              items: <String>[
+                                'user',
+                                'volunteer',
+                                'ngo'
+                              ].map<DropdownMenuItem<String>>((String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
                                   child: Text(
@@ -172,7 +183,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       fullName: _fullNameController.text.trim(),
                                       email: _emailController.text.trim(),
                                       password: _passwordController.text.trim(),
-                                      phoneNumber: _phoneNumberController.text.trim(),
+                                      phoneNumber:
+                                          _phoneNumberController.text.trim(),
                                       role: _selectedRole,
                                       profilePictureUrl: _profilePictureUrl,
                                     );
@@ -181,7 +193,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     });
                                   },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFF4ABECD), // Same as login button
+                              backgroundColor:
+                                  Color(0xFF4ABECD), // Same as login button
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
