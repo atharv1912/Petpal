@@ -642,4 +642,15 @@ class SupabaseService {
       return [];
     }
   }
+
+  Future<Map<String, dynamic>?> getReportById(String reportId) async {
+    try {
+      final response =
+          await supabase.from('reports').select().eq('id', reportId).single();
+      return response as Map<String, dynamic>?;
+    } catch (e) {
+      debugPrint('Error getting report by ID: $e');
+      return null;
+    }
+  }
 }

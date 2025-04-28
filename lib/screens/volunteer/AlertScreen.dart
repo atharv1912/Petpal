@@ -3,6 +3,7 @@ import 'package:flutter_application_1/auth/SupabaseServices.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter_application_1/screens/volunteer/ReportDetailsScreen.dart';
+import 'package:flutter_application_1/screens/volunteer/RescueOperationScreen.dart';
 
 class AlertScreen extends StatefulWidget {
   const AlertScreen({super.key});
@@ -502,9 +503,9 @@ class _AlertScreenState extends State<AlertScreen> {
         ));
   }
 
+  // In the _handleReportAction method, modify the 'assigned' case to navigate to RescueOperationScreen
   Future<void> _handleReportAction(dynamic reportId, String status) async {
     try {
-      // Convert reportId to string if it's not already
       final String reportIdStr = reportId.toString();
 
       await _supabaseService.updateReportStatus(
@@ -519,6 +520,24 @@ class _AlertScreenState extends State<AlertScreen> {
             reportId: reportIdStr,
             volunteerId: userId,
           );
+
+          // After successful assignment, get the updated report data
+          final updatedReport =
+              await _supabaseService.getReportById(reportIdStr);
+
+          if (mounted && updatedReport != null) {
+            // Navigate to RescueOperationScreen with the updated report
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    RescueOperationScreen(report: updatedReport),
+              ),
+            );
+
+            // Don't show the snackbar since we're navigating
+            return;
+          }
         }
       }
 
@@ -554,10 +573,7 @@ class _AlertScreenState extends State<AlertScreen> {
           SnackBar(
             content: Row(
               children: [
-                const Icon(
-                  Icons.error_outline,
-                  color: Colors.white,
-                ),
+                const Icon(Icons.error_outline, color: Colors.white),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text('Failed to update alert: ${e.toString()}'),
