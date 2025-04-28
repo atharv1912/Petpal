@@ -1,0 +1,84 @@
+com.example.flutter_application_1.app-transition-1.4.1-0 C:\Users\HARSHAL\.gradle\caches\transforms-4\0475539586a5102514461e3c4ef43a8b\transformed\transition-1.4.1\res
+com.example.flutter_application_1.app-sqlite-framework-2.3.0-1 C:\Users\HARSHAL\.gradle\caches\transforms-4\06f5fa72213b0db3b656bbe31e90a35d\transformed\sqlite-framework-2.3.0\res
+com.example.flutter_application_1.app-cardview-1.0.0-2 C:\Users\HARSHAL\.gradle\caches\transforms-4\09d7ff001e99b6118e2f52a238b776d7\transformed\cardview-1.0.0\res
+com.example.flutter_application_1.app-jetified-camera-camera2-1.4.1-3 C:\Users\HARSHAL\.gradle\caches\transforms-4\12724678b8ffff8820aad7a2119c2c28\transformed\jetified-camera-camera2-1.4.1\res
+com.example.flutter_application_1.app-jetified-annotation-experimental-1.4.1-4 C:\Users\HARSHAL\.gradle\caches\transforms-4\169bb0cc3c4f31d046758e4c6d5a4f1d\transformed\jetified-annotation-experimental-1.4.1\res
+com.example.flutter_application_1.app-jetified-tracing-1.2.0-5 C:\Users\HARSHAL\.gradle\caches\transforms-4\17bb2217b4ea54645422c69f5f8a5f98\transformed\jetified-tracing-1.2.0\res
+com.example.flutter_application_1.app-localbroadcastmanager-1.1.0-6 C:\Users\HARSHAL\.gradle\caches\transforms-4\1d1422315130439fffd25e3fe57d2f1c\transformed\localbroadcastmanager-1.1.0\res
+com.example.flutter_application_1.app-jetified-appcompat-resources-1.6.1-7 C:\Users\HARSHAL\.gradle\caches\transforms-4\1dcee33d9556a49e65089d0ed09e7d16\transformed\jetified-appcompat-resources-1.6.1\res
+com.example.flutter_application_1.app-jetified-tracing-ktx-1.2.0-8 C:\Users\HARSHAL\.gradle\caches\transforms-4\254a380fd970ceb2118849914d858d53\transformed\jetified-tracing-ktx-1.2.0\res
+com.example.flutter_application_1.app-lifecycle-livedata-2.7.0-9 C:\Users\HARSHAL\.gradle\caches\transforms-4\296696cd22884dc750f355c7970017c5\transformed\lifecycle-livedata-2.7.0\res
+com.example.flutter_application_1.app-jetified-fragment-ktx-1.7.1-10 C:\Users\HARSHAL\.gradle\caches\transforms-4\32ec24dd3fd0791a1efebde173bf4fc6\transformed\jetified-fragment-ktx-1.7.1\res
+com.example.flutter_application_1.app-jetified-window-1.2.0-11 C:\Users\HARSHAL\.gradle\caches\transforms-4\3470ba0024864e82c107b6dd355802d6\transformed\jetified-window-1.2.0\res
+com.example.flutter_application_1.app-appcompat-1.6.1-12 C:\Users\HARSHAL\.gradle\caches\transforms-4\38b06997c4c1b0d7fd895bd9a25248f1\transformed\appcompat-1.6.1\res
+com.example.flutter_application_1.app-jetified-activity-1.9.3-13 C:\Users\HARSHAL\.gradle\caches\transforms-4\41105e15c40d6c8ec0787bd47967461f\transformed\jetified-activity-1.9.3\res
+com.example.flutter_application_1.app-jetified-emoji2-1.2.0-14 C:\Users\HARSHAL\.gradle\caches\transforms-4\4b7ab821de1d3cf5e5b07387f3a6c19d\transformed\jetified-emoji2-1.2.0\res
+com.example.flutter_application_1.app-jetified-startup-runtime-1.1.1-15 C:\Users\HARSHAL\.gradle\caches\transforms-4\569a9f2e04893020dc5e7baaf7fc5d2d\transformed\jetified-startup-runtime-1.1.1\res
+com.example.flutter_application_1.app-jetified-camera-lifecycle-1.4.1-16 C:\Users\HARSHAL\.gradle\caches\transforms-4\5857f142cd2c3e94f4e77147c03b738b\transformed\jetified-camera-lifecycle-1.4.1\res
+com.example.flutter_application_1.app-browser-1.8.0-17 C:\Users\HARSHAL\.gradle\caches\transforms-4\5975c4544dacce822f60d9d781a585bd\transformed\browser-1.8.0\res
+com.example.flutter_application_1.app-jetified-firebase-common-21.0.0-18 C:\Users\HARSHAL\.gradle\caches\transforms-4\5af2ee737b99882ba26d562fa429ecd4\transformed\jetified-firebase-common-21.0.0\res
+com.example.flutter_application_1.app-jetified-savedstate-ktx-1.2.1-19 C:\Users\HARSHAL\.gradle\caches\transforms-4\5d17f0fce9496f3800786fb95b26c97a\transformed\jetified-savedstate-ktx-1.2.1\res
+com.example.flutter_application_1.app-jetified-play-services-basement-18.3.0-20 C:\Users\HARSHAL\.gradle\caches\transforms-4\66660da8c4b0acc7c686855de6c0719d\transformed\jetified-play-services-basement-18.3.0\res
+com.example.flutter_application_1.app-jetified-savedstate-1.2.1-21 C:\Users\HARSHAL\.gradle\caches\transforms-4\6752d481875687b429b1edd453a3d06d\transformed\jetified-savedstate-1.2.1\res
+com.example.flutter_application_1.app-jetified-window-java-1.2.0-22 C:\Users\HARSHAL\.gradle\caches\transforms-4\69118be946e1cd7d8a534c9b221e4b28\transformed\jetified-window-java-1.2.0\res
+com.example.flutter_application_1.app-room-runtime-2.5.0-23 C:\Users\HARSHAL\.gradle\caches\transforms-4\6b654cc82a01fac997dfa1634b902e91\transformed\room-runtime-2.5.0\res
+com.example.flutter_application_1.app-preference-1.2.1-24 C:\Users\HARSHAL\.gradle\caches\transforms-4\7671c2e00dc9f29863b918c42e424857\transformed\preference-1.2.1\res
+com.example.flutter_application_1.app-sqlite-2.3.0-25 C:\Users\HARSHAL\.gradle\caches\transforms-4\7a8d3474f42b405000d0ecd0a56972b8\transformed\sqlite-2.3.0\res
+com.example.flutter_application_1.app-jetified-lifecycle-service-2.7.0-26 C:\Users\HARSHAL\.gradle\caches\transforms-4\7a8eaa7d8ac6ca3c3fb094fa8288d1ef\transformed\jetified-lifecycle-service-2.7.0\res
+com.example.flutter_application_1.app-jetified-lifecycle-viewmodel-savedstate-2.7.0-27 C:\Users\HARSHAL\.gradle\caches\transforms-4\8d92480a505e0e812e79f5c3196df739\transformed\jetified-lifecycle-viewmodel-savedstate-2.7.0\res
+com.example.flutter_application_1.app-jetified-core-1.0.0-28 C:\Users\HARSHAL\.gradle\caches\transforms-4\91d066f2fe2e1e5cdb33fb42eb9bd82a\transformed\jetified-core-1.0.0\res
+com.example.flutter_application_1.app-jetified-lifecycle-viewmodel-ktx-2.7.0-29 C:\Users\HARSHAL\.gradle\caches\transforms-4\93fb3eb0f63e26744fe4b7815c26974b\transformed\jetified-lifecycle-viewmodel-ktx-2.7.0\res
+com.example.flutter_application_1.app-jetified-core-ktx-1.13.1-30 C:\Users\HARSHAL\.gradle\caches\transforms-4\ab50e8b5deb6245688aa456c735e4664\transformed\jetified-core-ktx-1.13.1\res
+com.example.flutter_application_1.app-jetified-profileinstaller-1.3.1-31 C:\Users\HARSHAL\.gradle\caches\transforms-4\aefc6dfc89c28b1b22ec58dcc0b3bafa\transformed\jetified-profileinstaller-1.3.1\res
+com.example.flutter_application_1.app-constraintlayout-2.0.1-32 C:\Users\HARSHAL\.gradle\caches\transforms-4\b5ca1ab22b02066e2a586af5a2701f4b\transformed\constraintlayout-2.0.1\res
+com.example.flutter_application_1.app-core-1.13.1-33 C:\Users\HARSHAL\.gradle\caches\transforms-4\b623a97cd1d5f996e2bdb6dfa9a69ef2\transformed\core-1.13.1\res
+com.example.flutter_application_1.app-jetified-datastore-release-34 C:\Users\HARSHAL\.gradle\caches\transforms-4\b7011c403eb206f281bbc911922ae130\transformed\jetified-datastore-release\res
+com.example.flutter_application_1.app-core-runtime-2.2.0-35 C:\Users\HARSHAL\.gradle\caches\transforms-4\baee158eafe4980f059605f37ccd40d9\transformed\core-runtime-2.2.0\res
+com.example.flutter_application_1.app-lifecycle-livedata-core-2.7.0-36 C:\Users\HARSHAL\.gradle\caches\transforms-4\c304251068394b5268e338c44261797a\transformed\lifecycle-livedata-core-2.7.0\res
+com.example.flutter_application_1.app-jetified-lifecycle-process-2.7.0-37 C:\Users\HARSHAL\.gradle\caches\transforms-4\c715b014e7f00fedc50e2d0e8d64abc0\transformed\jetified-lifecycle-process-2.7.0\res
+com.example.flutter_application_1.app-jetified-camera-core-1.4.1-38 C:\Users\HARSHAL\.gradle\caches\transforms-4\cca657d7e05ee06a0fae3ab6ceef6dad\transformed\jetified-camera-core-1.4.1\res
+com.example.flutter_application_1.app-jetified-camera-video-1.4.1-39 C:\Users\HARSHAL\.gradle\caches\transforms-4\ce8528252ce8d7e225371f989027ad7b\transformed\jetified-camera-video-1.4.1\res
+com.example.flutter_application_1.app-jetified-datastore-core-release-40 C:\Users\HARSHAL\.gradle\caches\transforms-4\d0acc7886c564ff5674cc7bdc2c3283c\transformed\jetified-datastore-core-release\res
+com.example.flutter_application_1.app-recyclerview-1.1.0-41 C:\Users\HARSHAL\.gradle\caches\transforms-4\d1cb4ea3935f18195230b976447668d1\transformed\recyclerview-1.1.0\res
+com.example.flutter_application_1.app-lifecycle-viewmodel-2.7.0-42 C:\Users\HARSHAL\.gradle\caches\transforms-4\d72d74070a6dde0edab384d10870ae61\transformed\lifecycle-viewmodel-2.7.0\res
+com.example.flutter_application_1.app-jetified-play-services-base-18.3.0-43 C:\Users\HARSHAL\.gradle\caches\transforms-4\d9f00339ce5d846056998450dcc4813e\transformed\jetified-play-services-base-18.3.0\res
+com.example.flutter_application_1.app-media-1.7.0-44 C:\Users\HARSHAL\.gradle\caches\transforms-4\e1f87601316ed70443f26e5d99ecce5e\transformed\media-1.7.0\res
+com.example.flutter_application_1.app-jetified-lifecycle-runtime-ktx-2.7.0-45 C:\Users\HARSHAL\.gradle\caches\transforms-4\e36a156a2b9191d113b164b0d0ef593d\transformed\jetified-lifecycle-runtime-ktx-2.7.0\res
+com.example.flutter_application_1.app-webkit-1.12.1-46 C:\Users\HARSHAL\.gradle\caches\transforms-4\e4d4a8adeec64bf1f52f271fd0e64427\transformed\webkit-1.12.1\res
+com.example.flutter_application_1.app-material-1.11.0-47 C:\Users\HARSHAL\.gradle\caches\transforms-4\e63beff431b09bb3378d64e12ad90167\transformed\material-1.11.0\res
+com.example.flutter_application_1.app-jetified-activity-ktx-1.9.3-48 C:\Users\HARSHAL\.gradle\caches\transforms-4\e6c7c9fd2e8ec1481a56f3175f03551b\transformed\jetified-activity-ktx-1.9.3\res
+com.example.flutter_application_1.app-jetified-lifecycle-livedata-core-ktx-2.7.0-49 C:\Users\HARSHAL\.gradle\caches\transforms-4\e8a0ca5e1693b0a68beeb7d1cd768304\transformed\jetified-lifecycle-livedata-core-ktx-2.7.0\res
+com.example.flutter_application_1.app-coordinatorlayout-1.1.0-50 C:\Users\HARSHAL\.gradle\caches\transforms-4\e9ea8a369e1e9d29feae3a45a8216874\transformed\coordinatorlayout-1.1.0\res
+com.example.flutter_application_1.app-slidingpanelayout-1.2.0-51 C:\Users\HARSHAL\.gradle\caches\transforms-4\ea61d98e6eea5c46fff58c7eda8fb176\transformed\slidingpanelayout-1.2.0\res
+com.example.flutter_application_1.app-lifecycle-reactivestreams-2.7.0-52 C:\Users\HARSHAL\.gradle\caches\transforms-4\eb76319987ecb2463b73ddaadcbaa788\transformed\lifecycle-reactivestreams-2.7.0\res
+com.example.flutter_application_1.app-jetified-emoji2-views-helper-1.2.0-53 C:\Users\HARSHAL\.gradle\caches\transforms-4\f608db4ec6c76078e50db343c6928052\transformed\jetified-emoji2-views-helper-1.2.0\res
+com.example.flutter_application_1.app-fragment-1.7.1-54 C:\Users\HARSHAL\.gradle\caches\transforms-4\fc0167146845144924e629430717f0c2\transformed\fragment-1.7.1\res
+com.example.flutter_application_1.app-drawerlayout-1.1.1-55 C:\Users\HARSHAL\.gradle\caches\transforms-4\feda26510de319261d69be8b313046ca\transformed\drawerlayout-1.1.1\res
+com.example.flutter_application_1.app-jetified-datastore-preferences-release-56 C:\Users\HARSHAL\.gradle\caches\transforms-4\fef324e23251e509177146470a0dde3a\transformed\jetified-datastore-preferences-release\res
+com.example.flutter_application_1.app-lifecycle-runtime-2.7.0-57 C:\Users\HARSHAL\.gradle\caches\transforms-4\ff239cf54560279745a4ab8b08f16464\transformed\lifecycle-runtime-2.7.0\res
+com.example.flutter_application_1.app-jetified-viewpager2-1.0.0-58 C:\Users\HARSHAL\.gradle\caches\transforms-4\ff99c5515c0c3f30e2fbb9e72557b828\transformed\jetified-viewpager2-1.0.0\res
+com.example.flutter_application_1.app-debug-59 C:\Users\HARSHAL\Petpal atharv\petpal atharv animal detection final\Petpal\android\app\src\debug\res
+com.example.flutter_application_1.app-main-60 C:\Users\HARSHAL\Petpal atharv\petpal atharv animal detection final\Petpal\android\app\src\main\res
+com.example.flutter_application_1.app-pngs-61 C:\Users\HARSHAL\Petpal atharv\petpal atharv animal detection final\Petpal\build\app\generated\res\pngs\debug
+com.example.flutter_application_1.app-resValues-62 C:\Users\HARSHAL\Petpal atharv\petpal atharv animal detection final\Petpal\build\app\generated\res\resValues\debug
+com.example.flutter_application_1.app-packageDebugResources-63 C:\Users\HARSHAL\Petpal atharv\petpal atharv animal detection final\Petpal\build\app\intermediates\incremental\debug\packageDebugResources\merged.dir
+com.example.flutter_application_1.app-packageDebugResources-64 C:\Users\HARSHAL\Petpal atharv\petpal atharv animal detection final\Petpal\build\app\intermediates\incremental\debug\packageDebugResources\stripped.dir
+com.example.flutter_application_1.app-debug-65 C:\Users\HARSHAL\Petpal atharv\petpal atharv animal detection final\Petpal\build\app\intermediates\merged_res\debug\mergeDebugResources
+com.example.flutter_application_1.app-debug-66 C:\Users\HARSHAL\Petpal atharv\petpal atharv animal detection final\Petpal\build\app_links\intermediates\packaged_res\debug\packageDebugResources
+com.example.flutter_application_1.app-debug-67 C:\Users\HARSHAL\Petpal atharv\petpal atharv animal detection final\Petpal\build\awesome_notifications\intermediates\packaged_res\debug\packageDebugResources
+com.example.flutter_application_1.app-debug-68 C:\Users\HARSHAL\Petpal atharv\petpal atharv animal detection final\Petpal\build\camera_android_camerax\intermediates\packaged_res\debug\packageDebugResources
+com.example.flutter_application_1.app-debug-69 C:\Users\HARSHAL\Petpal atharv\petpal atharv animal detection final\Petpal\build\firebase_core\intermediates\packaged_res\debug\packageDebugResources
+com.example.flutter_application_1.app-debug-70 C:\Users\HARSHAL\Petpal atharv\petpal atharv animal detection final\Petpal\build\flutter_local_notifications\intermediates\packaged_res\debug\packageDebugResources
+com.example.flutter_application_1.app-debug-71 C:\Users\HARSHAL\Petpal atharv\petpal atharv animal detection final\Petpal\build\flutter_plugin_android_lifecycle\intermediates\packaged_res\debug\packageDebugResources
+com.example.flutter_application_1.app-debug-72 C:\Users\HARSHAL\Petpal atharv\petpal atharv animal detection final\Petpal\build\fluttertoast\intermediates\packaged_res\debug\packageDebugResources
+com.example.flutter_application_1.app-debug-73 C:\Users\HARSHAL\Petpal atharv\petpal atharv animal detection final\Petpal\build\geocoding_android\intermediates\packaged_res\debug\packageDebugResources
+com.example.flutter_application_1.app-debug-74 C:\Users\HARSHAL\Petpal atharv\petpal atharv animal detection final\Petpal\build\geolocator_android\intermediates\packaged_res\debug\packageDebugResources
+com.example.flutter_application_1.app-debug-75 C:\Users\HARSHAL\Petpal atharv\petpal atharv animal detection final\Petpal\build\google_mlkit_commons\intermediates\packaged_res\debug\packageDebugResources
+com.example.flutter_application_1.app-debug-76 C:\Users\HARSHAL\Petpal atharv\petpal atharv animal detection final\Petpal\build\google_mlkit_image_labeling\intermediates\packaged_res\debug\packageDebugResources
+com.example.flutter_application_1.app-debug-77 C:\Users\HARSHAL\Petpal atharv\petpal atharv animal detection final\Petpal\build\image_picker_android\intermediates\packaged_res\debug\packageDebugResources
+com.example.flutter_application_1.app-debug-78 C:\Users\HARSHAL\Petpal atharv\petpal atharv animal detection final\Petpal\build\path_provider_android\intermediates\packaged_res\debug\packageDebugResources
+com.example.flutter_application_1.app-debug-79 C:\Users\HARSHAL\Petpal atharv\petpal atharv animal detection final\Petpal\build\permission_handler_android\intermediates\packaged_res\debug\packageDebugResources
+com.example.flutter_application_1.app-debug-80 C:\Users\HARSHAL\Petpal atharv\petpal atharv animal detection final\Petpal\build\shared_preferences_android\intermediates\packaged_res\debug\packageDebugResources
+com.example.flutter_application_1.app-debug-81 C:\Users\HARSHAL\Petpal atharv\petpal atharv animal detection final\Petpal\build\sign_in_with_apple\intermediates\packaged_res\debug\packageDebugResources
+com.example.flutter_application_1.app-debug-82 C:\Users\HARSHAL\Petpal atharv\petpal atharv animal detection final\Petpal\build\url_launcher_android\intermediates\packaged_res\debug\packageDebugResources
+com.example.flutter_application_1.app-debug-83 C:\Users\HARSHAL\Petpal atharv\petpal atharv animal detection final\Petpal\build\webview_flutter_android\intermediates\packaged_res\debug\packageDebugResources

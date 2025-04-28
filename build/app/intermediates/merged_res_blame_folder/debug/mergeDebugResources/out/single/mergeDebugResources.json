@@ -1,0 +1,46 @@
+[
+    {
+        "merged": "C:\\Users\\HARSHAL\\.gradle\\daemon\\8.7\\com.example.flutter_application_1.app-debug-65:\\mipmap-mdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\HARSHAL\\.gradle\\daemon\\8.7\\com.example.flutter_application_1.app-main-60:\\mipmap-mdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\HARSHAL\\.gradle\\daemon\\8.7\\com.example.flutter_application_1.app-debug-65:\\mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\HARSHAL\\.gradle\\daemon\\8.7\\com.example.flutter_application_1.app-main-60:\\mipmap-xxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "com.example.flutter_application_1.app-debug-65:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "com.example.flutter_application_1.app-main-60:/mipmap-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\HARSHAL\\.gradle\\daemon\\8.7\\com.example.flutter_application_1.app-debug-65:\\mipmap-hdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\HARSHAL\\.gradle\\daemon\\8.7\\com.example.flutter_application_1.app-main-60:\\mipmap-hdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "com.example.flutter_application_1.app-debug-65:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "com.example.flutter_application_1.app-main-60:/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\HARSHAL\\.gradle\\daemon\\8.7\\com.example.flutter_application_1.app-debug-65:\\mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\HARSHAL\\.gradle\\daemon\\8.7\\com.example.flutter_application_1.app-main-60:\\mipmap-xxxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "com.example.flutter_application_1.app-debug-65:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "com.example.flutter_application_1.app-main-60:/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\HARSHAL\\.gradle\\daemon\\8.7\\com.example.flutter_application_1.app-debug-65:\\mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\HARSHAL\\.gradle\\daemon\\8.7\\com.example.flutter_application_1.app-main-60:\\mipmap-xhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "com.example.flutter_application_1.app-debug-65:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "com.example.flutter_application_1.app-main-60:/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.example.flutter_application_1.app-debug-65:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "com.example.flutter_application_1.app-main-60:/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\HARSHAL\\.gradle\\daemon\\8.7\\com.example.flutter_application_1.app-debug-65:\\drawable-v21_launch_background.xml.flat",
+        "source": "C:\\Users\\HARSHAL\\.gradle\\daemon\\8.7\\com.example.flutter_application_1.app-main-60:\\drawable-v21\\launch_background.xml"
+    }
+]
