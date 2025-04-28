@@ -11,7 +11,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  bool isDarkMode = true;
+  bool isDarkMode = false;
   bool isLoading = true;
   Map<String, dynamic>? userData;
   final SupabaseService supabaseService = SupabaseService();
@@ -66,16 +66,32 @@ class _ProfilePageState extends State<ProfilePage> {
     final shouldLogout = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Logout'),
-        content: const Text('Are you sure you want to log out?'),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        backgroundColor: Colors.white,
+        title: Text(
+          'Logout',
+          style: TextStyle(
+            color: Color(0xFF1A237E), // indigo[900]
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: const Text(
+          'Are you sure you want to log out?',
+          style: TextStyle(color: Colors.black87),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(
+              'Cancel',
+              style: TextStyle(color: Colors.black54),
+            ),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text(
+            child: Text(
               'Logout',
               style: TextStyle(color: Colors.red),
             ),
@@ -90,34 +106,33 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _logout() async {
-  try {
-    setState(() => isLoading = true);
-    await supabaseService.logout();
-    if (!mounted) return;
-    
-    // Replace pushNamedAndRemoveUntil with direct navigation
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => LoginPage()),
-      (route) => false,
-    );
-  } catch (e) {
-    if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Error logging out: $e')),
-    );
-  } finally {
-    if (mounted) setState(() => isLoading = false);
+    try {
+      setState(() => isLoading = true);
+      await supabaseService.logout();
+      if (!mounted) return;
+
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => LoginPage()),
+        (route) => false,
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error logging out: $e')),
+      );
+    } finally {
+      if (mounted) setState(() => isLoading = false);
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
       return Scaffold(
-        backgroundColor: const Color(0xFFFFF8E1),
+        backgroundColor: const Color(0xFFFFFAE7),
         body: const Center(
           child: CircularProgressIndicator(
-            color: Colors.amber,
+            color: Color(0xFF4ABECD),
           ),
         ),
       );
@@ -125,14 +140,14 @@ class _ProfilePageState extends State<ProfilePage> {
 
     if (userData == null) {
       return Scaffold(
-        backgroundColor: const Color(0xFFFFF8E1),
+        backgroundColor: const Color(0xFFFFFAE7),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
                 'Failed to load profile data',
-                style: TextStyle(fontSize: 18),
+                style: TextStyle(fontSize: 18, color: Color(0xFF1A237E)),
               ),
               const SizedBox(height: 16),
               ElevatedButton.icon(
@@ -140,12 +155,12 @@ class _ProfilePageState extends State<ProfilePage> {
                 icon: const Icon(Icons.refresh),
                 label: const Text('Retry'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.amber,
-                  foregroundColor: Colors.black,
+                  backgroundColor: Color(0xFF4ABECD),
+                  foregroundColor: Colors.white,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
               ),
@@ -156,25 +171,25 @@ class _ProfilePageState extends State<ProfilePage> {
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF8E1),
+      backgroundColor: const Color(0xFFFFFAE7),
       appBar: AppBar(
-        backgroundColor: const Color(0xFFFFF8E1),
+        backgroundColor: const Color(0xFFFFFAE7),
         elevation: 0,
         leading: IconButton(
           icon: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.amber.withOpacity(0.2),
+              color: Color(0xFF4ABECD).withOpacity(0.2),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Icon(Icons.arrow_back, color: Colors.black),
+            child: const Icon(Icons.arrow_back, color: Color(0xFF1A237E)),
           ),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
           'Profile',
           style: TextStyle(
-            color: Colors.black,
+            color: Color(0xFF1A237E),
             fontSize: 24,
             fontWeight: FontWeight.w600,
           ),
@@ -242,10 +257,10 @@ class _ProfilePageState extends State<ProfilePage> {
                             height: 40,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Colors.blue,
+                              color: Color(0xFF4ABECD),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.blue.withOpacity(0.3),
+                                  color: Color(0xFF4ABECD).withOpacity(0.3),
                                   spreadRadius: 2,
                                   blurRadius: 8,
                                 ),
@@ -267,7 +282,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     style: const TextStyle(
                       fontSize: 26,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: Color(0xFF1A237E),
                       letterSpacing: 0.5,
                     ),
                   ),
@@ -276,14 +291,14 @@ class _ProfilePageState extends State<ProfilePage> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                     decoration: BoxDecoration(
-                      color: Colors.blue.withOpacity(0.1),
+                      color: Color(0xFF4ABECD).withOpacity(0.1),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
                       userData?['role'] ?? 'User',
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.blue.shade700,
+                        color: Color(0xFF4ABECD),
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -298,7 +313,7 @@ class _ProfilePageState extends State<ProfilePage> {
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.5),
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
@@ -318,11 +333,11 @@ class _ProfilePageState extends State<ProfilePage> {
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFE8EAF6),
+                            color: Color(0xFF4ABECD).withOpacity(0.1),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: const Icon(Icons.person_outline,
-                              color: Colors.blue),
+                              color: Color(0xFF4ABECD)),
                         ),
                         const SizedBox(width: 12),
                         const Text(
@@ -330,7 +345,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black87,
+                            color: Color(0xFF1A237E),
                           ),
                         ),
                       ],
@@ -368,7 +383,7 @@ class _ProfilePageState extends State<ProfilePage> {
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.5),
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
@@ -388,11 +403,11 @@ class _ProfilePageState extends State<ProfilePage> {
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFE8EAF6),
+                            color: Color(0xFF4ABECD).withOpacity(0.1),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: const Icon(Icons.settings_outlined,
-                              color: Colors.blue),
+                              color: Color(0xFF4ABECD)),
                         ),
                         const SizedBox(width: 12),
                         const Text(
@@ -400,7 +415,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black87,
+                            color: Color(0xFF1A237E),
                           ),
                         ),
                       ],
@@ -459,18 +474,32 @@ class _ProfilePageState extends State<ProfilePage> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        title: Text(title),
+        backgroundColor: Colors.white,
+        title: Text(
+          title,
+          style: TextStyle(
+            color: Color(0xFF1A237E),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         content: TextField(
           controller: controller,
           decoration: InputDecoration(
             labelText: title,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+            labelStyle: TextStyle(color: Colors.grey),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: Colors.indigo.shade200),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Colors.blue, width: 2),
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: Color(0xFF1A237E), width: 2),
             ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            filled: true,
+            fillColor: Colors.white,
           ),
         ),
         actions: [
@@ -487,10 +516,10 @@ class _ProfilePageState extends State<ProfilePage> {
               await _updateProfileField(field, controller.text);
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
+              backgroundColor: Color(0xFF4ABECD),
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(8),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             ),
@@ -531,7 +560,14 @@ class _ProfilePageState extends State<ProfilePage> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        title: const Text('Change Password'),
+        backgroundColor: Colors.white,
+        title: Text(
+          'Change Password',
+          style: TextStyle(
+            color: Color(0xFF1A237E),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -540,10 +576,21 @@ class _ProfilePageState extends State<ProfilePage> {
               obscureText: true,
               decoration: InputDecoration(
                 labelText: 'Current Password',
+                labelStyle: TextStyle(color: Colors.grey),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                prefixIcon: const Icon(Icons.lock_outline),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.indigo.shade200),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Color(0xFF1A237E), width: 2),
+                ),
+                filled: true,
+                fillColor: Colors.white,
+                prefixIcon: const Icon(Icons.lock_outline, color: Colors.grey),
               ),
             ),
             const SizedBox(height: 16),
@@ -552,10 +599,21 @@ class _ProfilePageState extends State<ProfilePage> {
               obscureText: true,
               decoration: InputDecoration(
                 labelText: 'New Password',
+                labelStyle: TextStyle(color: Colors.grey),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                prefixIcon: const Icon(Icons.lock),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.indigo.shade200),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Color(0xFF1A237E), width: 2),
+                ),
+                filled: true,
+                fillColor: Colors.white,
+                prefixIcon: const Icon(Icons.lock, color: Colors.grey),
               ),
             ),
             const SizedBox(height: 16),
@@ -564,10 +622,21 @@ class _ProfilePageState extends State<ProfilePage> {
               obscureText: true,
               decoration: InputDecoration(
                 labelText: 'Confirm New Password',
+                labelStyle: TextStyle(color: Colors.grey),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                prefixIcon: const Icon(Icons.lock_reset),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.indigo.shade200),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Color(0xFF1A237E), width: 2),
+                ),
+                filled: true,
+                fillColor: Colors.white,
+                prefixIcon: const Icon(Icons.lock_reset, color: Colors.grey),
               ),
             ),
           ],
@@ -597,10 +666,10 @@ class _ProfilePageState extends State<ProfilePage> {
               );
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
+              backgroundColor: Color(0xFF4ABECD),
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(8),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             ),
@@ -663,7 +732,7 @@ class InfoField extends StatelessWidget {
       child: Row(
         children: [
           if (icon != null) ...[
-            Icon(icon, size: 20, color: Colors.grey.shade600),
+            Icon(icon, size: 20, color: Color(0xFF4ABECD)),
             const SizedBox(width: 12),
           ],
           SizedBox(
@@ -680,20 +749,21 @@ class InfoField extends StatelessWidget {
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
-                color: Colors.black,
+                color: Color(0xFF1A237E),
               ),
             ),
           ),
           if (isEditable)
             Container(
               decoration: BoxDecoration(
-                color: Colors.blue.withOpacity(0.1),
+                color: Color(0xFF4ABECD).withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: IconButton(
-                icon: const Icon(Icons.edit, size: 18, color: Colors.blue),
+                icon:
+                    const Icon(Icons.edit, size: 18, color: Color(0xFF4ABECD)),
                 onPressed: onEdit,
                 splashRadius: 20,
               ),
@@ -738,10 +808,10 @@ class SettingsItem extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: Colors.grey.shade200,
+                color: Color(0xFF4ABECD).withOpacity(0.1),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Icon(icon, color: Colors.blue.shade700, size: 20),
+              child: Icon(icon, color: Color(0xFF4ABECD), size: 20),
             ),
             const SizedBox(width: 15),
             Expanded(
@@ -750,10 +820,10 @@ class SettingsItem extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: Colors.black,
+                      color: Color(0xFF1A237E),
                     ),
                   ),
                   if (subtitle != null)
@@ -774,19 +844,19 @@ class SettingsItem extends StatelessWidget {
               Switch(
                 value: isToggled,
                 onChanged: onToggle,
-                activeColor: Colors.blue,
-                activeTrackColor: Colors.blue.withOpacity(0.3),
+                activeColor: Color(0xFF4ABECD),
+                activeTrackColor: Color(0xFF4ABECD).withOpacity(0.3),
               ),
             if (showArrow)
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
+                  color: Color(0xFF4ABECD).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(
                   Icons.chevron_right,
-                  color: Colors.grey,
+                  color: Color(0xFF4ABECD),
                   size: 20,
                 ),
               ),

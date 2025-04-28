@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/screens/volunteer/RescueOperationScreen.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_application_1/auth/SupabaseServices.dart';
@@ -339,7 +340,7 @@ class ReportDetailsScreen extends StatelessWidget {
 
       // First accept the rescue request
       await _supabaseService.updateReportStatus(
-        reportId: report['id'].toString(), // Ensure ID is string
+        reportId: report['id'].toString(),
         status: 'assigned',
       );
 
@@ -347,18 +348,25 @@ class ReportDetailsScreen extends StatelessWidget {
       final userId = _supabaseService.getCurrentUserId();
       if (userId != null) {
         await _supabaseService.assignVolunteer(
-          reportId: report['id'].toString(), // Ensure ID is string
-          volunteerId: userId.toString(), // Ensure user ID is string
+          reportId: report['id'].toString(),
+          volunteerId: userId.toString(),
         );
       }
 
       // Close the loading dialog
       Navigator.pop(context);
 
-      // Then open navigation
-      await _openMaps(
-        double.parse(report['lat'].toString()), // Ensure lat is double
-        double.parse(report['lng'].toString()), // Ensure lng is double
+      // Navigate to RescueOperationScreen
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RescueOperationScreen(
+            report: {
+              ...report,
+              'status': 'assigned',
+            },
+          ),
+        ),
       );
 
       // Show success message
@@ -371,7 +379,8 @@ class ReportDetailsScreen extends StatelessWidget {
               Icon(Icons.check_circle, color: Colors.white),
               SizedBox(width: 16),
               Expanded(
-                child: Text('Rescue accepted! Opening navigation...'),
+                child:
+                    Text('Rescue accepted! You can now manage the operation.'),
               ),
             ],
           ),
@@ -381,9 +390,6 @@ class ReportDetailsScreen extends StatelessWidget {
           ),
         ),
       );
-
-      // Close the screen after successful operation
-      Navigator.pop(context, true); // Pass true to indicate success
     } catch (e) {
       // Close the loading dialog if it's still open
       Navigator.pop(context);

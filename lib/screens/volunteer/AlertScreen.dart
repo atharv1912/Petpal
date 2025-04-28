@@ -4,8 +4,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter_application_1/screens/volunteer/ReportDetailsScreen.dart';
 
-import 'package:permission_handler/permission_handler.dart';
-
 class AlertScreen extends StatefulWidget {
   const AlertScreen({super.key});
 
@@ -504,10 +502,13 @@ class _AlertScreenState extends State<AlertScreen> {
         ));
   }
 
-  Future<void> _handleReportAction(String reportId, String status) async {
+  Future<void> _handleReportAction(dynamic reportId, String status) async {
     try {
+      // Convert reportId to string if it's not already
+      final String reportIdStr = reportId.toString();
+
       await _supabaseService.updateReportStatus(
-        reportId: reportId,
+        reportId: reportIdStr,
         status: status,
       );
 
@@ -515,59 +516,64 @@ class _AlertScreenState extends State<AlertScreen> {
         final userId = _supabaseService.getCurrentUserId();
         if (userId != null) {
           await _supabaseService.assignVolunteer(
-            reportId: reportId,
+            reportId: reportIdStr,
             volunteerId: userId,
           );
         }
       }
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Row(
-            children: [
-              Icon(
-                status == 'assigned' ? Icons.check_circle : Icons.cancel,
-                color: Colors.white,
-              ),
-              const SizedBox(width: 12),
-              Text(
-                status == 'assigned'
-                    ? 'Alert accepted successfully!'
-                    : 'Alert rejected successfully!',
-              ),
-            ],
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                Icon(
+                  status == 'assigned' ? Icons.check_circle : Icons.cancel,
+                  color: Colors.white,
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  status == 'assigned'
+                      ? 'Alert accepted successfully!'
+                      : 'Alert rejected successfully!',
+                ),
+              ],
+            ),
+            backgroundColor: status == 'assigned' ? Colors.green : Colors.red,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            margin: const EdgeInsets.all(16),
           ),
-          backgroundColor: status == 'assigned' ? Colors.green : Colors.red,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          margin: const EdgeInsets.all(16),
-        ),
-      );
+        );
+      }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Row(
-            children: [
-              const Icon(
-                Icons.error_outline,
-                color: Colors.white,
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text('Failed to update alert: $e'),
-              ),
-            ],
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                const Icon(
+                  Icons.error_outline,
+                  color: Colors.white,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text('Failed to update alert: ${e.toString()}'),
+                ),
+              ],
+            ),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            margin: const EdgeInsets.all(16),
           ),
-          backgroundColor: Colors.red,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          margin: const EdgeInsets.all(16),
-        ),
-      );
+        );
+      }
+      debugPrint('Error in _handleReportAction: $e');
     }
   }
 }

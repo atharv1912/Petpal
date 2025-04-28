@@ -266,14 +266,16 @@ class _CameraScreenState extends State<CameraScreen>
       );
 
       if (shouldExit ?? false) {
-        if (mounted)
+        if (mounted) {
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (_) => HomePage()));
+        }
       }
     } else {
-      if (mounted)
+      if (mounted) {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (_) => HomePage()));
+      }
     }
   }
 

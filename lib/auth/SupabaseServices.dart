@@ -349,6 +349,7 @@ class SupabaseService {
   }
 
   // Update report status
+  // In SupabaseService
   Future<bool> updateReportStatus({
     required String reportId,
     required String status,
@@ -366,7 +367,6 @@ class SupabaseService {
     }
   }
 
-  // Assign a volunteer to a report
   Future<bool> assignVolunteer({
     required String reportId,
     required String volunteerId,
@@ -391,6 +391,27 @@ class SupabaseService {
       return false;
     }
   }
+
+  Future<bool> addRescueUpdate({
+    required String reportId,
+    required String status,
+    required String updateNotes,
+  }) async {
+    try {
+      await supabase.from('rescue_updates').insert({
+        'report_id': reportId,
+        'status': status,
+        'notes': updateNotes,
+        'created_at': DateTime.now().toIso8601String(),
+      });
+      return true;
+    } catch (e) {
+      print('Error adding rescue update: $e');
+      return false;
+    }
+  }
+
+  // Assign a volunteer to a report
 
   // Get volunteer assignments
   Future<List<Map<String, dynamic>>> getVolunteerAssignments() async {
@@ -548,6 +569,76 @@ class SupabaseService {
       return List<Map<String, dynamic>>.from(response);
     } catch (e) {
       print('Error fetching users by role: $e');
+      return [];
+    }
+  }
+
+  Future<void> sendAppreciationMessage({
+    required String reportId,
+    required String volunteerId,
+    required String reporterId,
+  }) async {
+    try {
+      print('Attempting to send appreciation message...');
+
+      // Get volunteer details
+      final volunteerResponse = await supabase
+          .from('users')
+          .select('name, email')
+          .eq('id', volunteerId)
+          .maybeSingle();
+
+      // Get reporter details
+      final reporterResponse = await supabase
+          .from('users')
+          .select('name, email')
+          .eq('id', reporterId)
+          .maybeSingle();
+
+      print('Volunteer data: $volunteerResponse');
+      print('Reporter data: $reporterResponse');
+
+      final volunteerName = volunteerResponse?['name'] ?? 'a volunteer';
+      final reporterName = reporterResponse?['name'] ?? 'a community member';
+
+      // Create appreciation message
+      final message =
+          '🌟 Great news! $volunteerName successfully rescued an animal reported by $reporterName. '
+          'Thank you for your compassion and service to our furry friends! 🐾';
+
+      print('Prepared message: $message');
+
+      // Send to community chat
+      final response = await supabase.from('community_messages').insert({
+        'user_id': volunteerId,
+        'message': message,
+        'user_name': 'PetPal Team',
+        'is_system': true,
+        'report_id': reportId, // Add report reference
+      }).select();
+
+      print('Message sent successfully: $response');
+    } catch (e) {
+      print('Error sending appreciation message: $e');
+      rethrow; // Re-throw to handle in the calling function
+    }
+  }
+
+  // Add this to your SupabaseService class
+  Future<List<Map<String, dynamic>>> getAssignedReports() async {
+    final user = supabase.auth.currentUser;
+    if (user == null) return [];
+
+    try {
+      final response = await supabase
+          .from('assignments')
+          .select('*, reports(*)')
+          .eq('volunteer_id', user.id)
+          .order('assigned_at', ascending: false);
+
+      return List<Map<String, dynamic>>.from(response);
+    } catch (e) {
+      print('Error fetching assigned reports: $e');
       return [];
     }
   }
